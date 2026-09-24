@@ -6,6 +6,8 @@ If the resume changes, update this file first, then the site.
 ## Identity
 - Name: Radhika Goel
 - LinkedIn: linkedin.com/in/radhikagoel4
+- Phone: +91 8447032640
+- Email: TBC (Radhika's GitHub email, to be confirmed)
 
 ## Education
 - Indian School of Business, PGP YL, intended major IT and Operations, 100% Merit Scholar. Jun 2025 to Feb 2027.
@@ -65,3 +67,6 @@ Hobbies: designing (Illustrator and Photoshop), movies, using Claude to build pr
 ## Rules
 - Label projected and targeted numbers as projections on the site (TCPL 50% / 18k, Country Delight 20 to 35% ARPU).
 - Numbers from the project context doc that are NOT on the resume (funnel 3,305 / 2,217 / 569, 14 interviews, survey stats) may appear inside case studies only if they do not contradict the resume.
+- Elective Planner is out of scope. Do not include it anywhere on the site.
+- Descriptions use placeholder copy for now and are replaced later. Numbers still follow this file.
+- Clean up the code (remove duplication, dead styles, unused files) at least every two build iterations.
