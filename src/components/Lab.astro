@@ -95,6 +95,10 @@ import { sideProjects, url } from '../data/projects.js';
   .body { max-width: 42rem; padding: 0.5rem 0 2.22222rem; font-family: var(--font-inter); font-size: 1.11111rem; }
   .eyebrow { color: #666; }
 
+  @media (prefers-reduced-motion: reduce) {
+    summary, summary::before, .title, .arrow, details::details-content { transition: none; }
+  }
+
   @media (max-width: 767.98px) {
     .lab { padding-block: 4rem 5rem; }
     .head { flex-direction: column; gap: 2.5rem; margin-bottom: 3rem; }
