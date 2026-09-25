@@ -116,8 +116,15 @@ const links = [
   }
 
   @media (max-width: 767.98px) {
+    .footer { padding-top: 2.5rem; }
     .top { font-size: 0.8rem; }
     .flowers { gap: 0.6rem; transform: translateX(-50%) scale(0.7); transform-origin: 50% 100%; }
-    .links { flex-direction: column; align-items: center; padding-top: 14%; }
+    .links { flex-direction: column; align-items: center; gap: 0.7rem; padding-top: 2.2rem; }
+    .links a { font-size: 0.95rem; }
+    /* Phones: darker top so every link reads, dots hold on longer so the name shows */
+    .panel { height: 21rem; }
+    .panel::before { background: linear-gradient(#000, rgba(0, 0, 0, 0.9) 40%, rgba(0, 0, 0, 0.4) 62%, transparent 78%); }
+    .panel::after { -webkit-mask-image: linear-gradient(#000 60%, rgba(0, 0, 0, 0.8) 82%, transparent 100%); mask-image: linear-gradient(#000 60%, rgba(0, 0, 0, 0.8) 82%, transparent 100%); }
+    .name { font-size: 13.5vw; bottom: 0.08em; }
   }
 </style>

@@ -273,14 +273,21 @@ const tools = ['figma', 'sql', 'tableau', 'excel', 'pendo'];
   .plus { position: absolute; right: 4%; top: 52%; color: #d8d8da; font-size: 1.8rem; font-weight: 300; line-height: 1; }
 
   @media (max-width: 1100px) {
-    .grid { grid-template-columns: 1fr; }
-    .profile { max-width: 26rem; }
+    .grid { grid-template-columns: minmax(0, 1fr); }
+    .profile { width: 100%; max-width: 26rem; }
     .stage { order: -1; margin-top: 0; }
   }
   @media (max-width: 767.98px) {
+    .hero { padding-bottom: 4rem; }
     .intro { width: 100%; margin-left: 0; padding: 1.6rem; transform: rotate(3deg); }
     .orbit, .plus { opacity: 0.5; }
     .body { max-width: none; }
+  }
+  @media (max-width: 480px) {
+    .orbit { display: none; }
+    .profile { font-size: 0.76rem; }
+    .contacts li { gap: 0.6rem; }
+    .intro { padding: 1.4rem 1.3rem; transform: rotate(2deg); }
   }
 </style>
 

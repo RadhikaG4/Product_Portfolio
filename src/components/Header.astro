@@ -101,6 +101,16 @@ const links = [
     .brand :global(.stamp) { --k: 0.46 !important; }
     nav a { padding: 0.45rem 0.75rem; font-size: 0.82rem; }
   }
+  @media (max-width: 400px) {
+    .site-header { gap: 0.5rem; }
+    .brand :global(.stamp) { --k: 0.4 !important; }
+    nav { padding: 0.25rem; }
+    nav a { padding: 0.4rem 0.52rem; font-size: 0.76rem; }
+  }
+  @media (max-width: 340px) {
+    .site-header { padding-inline: 0.9rem; }
+    nav a { padding-inline: 0.42rem; font-size: 0.72rem; }
+  }
   @media (prefers-reduced-motion: reduce) {
     .site-header, .veil, .pill { transition: none; }
   }
