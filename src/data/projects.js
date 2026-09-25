@@ -11,7 +11,7 @@ export const mainProjects = [
     slug: 'tata-consumer-products', short: 'Tata Consumer', name: 'Tata Consumer Products', tag: 'Digital Strategy Intern', period: 'Apr to May 2026',
     window: {
       lede: 'Why a third of AI-picked stores never got a visit, and how I got sales reps to trust the list again.',
-      tags: ['Field Research', 'AI Recommendations', 'Sales Tech'],
+      tags: ['Digital Strategy Intern', 'Field Research', 'AI Recommendations', 'Sales Tech'],
       overview: "Tata Consumer's sales reps found new stores on foot, and spent 18 to 20% of their time just searching. The team built a recommendation engine that puts new stores into the reps' sales app, with a map to each one. The Mumbai pilot worked, but a third of the recommended stores never got a visit. I set out to find out why, and what would make reps actually use the list.",
       role: 'Summer intern on the Digital (Data & AI) team for 8 weeks. I mapped the whole process end to end, went through the pilot data store by store, and ran a geospatial analysis. I spoke with 50 sales reps on the ground, then designed a feedback loop that lets reps correct the engine from inside the app.',
       highlights: [

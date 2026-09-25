@@ -1,5 +1,5 @@
 ---
-import Logo from './Logo.astro';
+import Stamp from './Stamp.astro';
 import { url } from '../data/projects.js';
 
 const links = [
@@ -16,11 +16,7 @@ const links = [
 
 <header class="site-header">
   <a class="brand" href={url('#home')} aria-label="Home">
-    <Logo size="2.2rem" />
-    <span class="tag">
-      <span>Product Manager</span>
-      <span class="live"><i></i>Open to PM roles</span>
-    </span>
+    <Stamp size={84} light id="stamp-path-nav" />
   </a>
   <nav aria-label="Main">
     <span class="pill" aria-hidden="true"></span>
@@ -45,21 +41,7 @@ const links = [
   .site-header > * { pointer-events: auto; }
   :global(html.nav-hidden) .site-header { transform: translateY(-101%); }
 
-  .brand { display: flex; align-items: center; gap: 1.1rem; color: #fff; }
-  .tag {
-    display: grid;
-    gap: 0.1rem;
-    padding-left: 1.1rem;
-    border-left: 1px solid rgba(255, 255, 255, 0.18);
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    line-height: 1.5;
-    color: #8a8f9c;
-  }
-  .live { color: var(--acc); }
-  .live i { display: inline-block; width: 5px; height: 5px; margin-right: 0.55rem; border-radius: 50%; background: currentColor; vertical-align: middle; animation: blink 2s ease-in-out infinite; }
+  .brand { display: flex; color: #fff; }
 
   /* Pill nav: a white pill slides under the active section */
   nav {
@@ -116,7 +98,7 @@ const links = [
   .b5 { -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); -webkit-mask-image: linear-gradient(to top, transparent 80%, #000 100%); mask-image: linear-gradient(to top, transparent 80%, #000 100%); }
 
   @media (max-width: 767.98px) {
-    .tag { display: none; }
+    .brand :global(.stamp) { --k: 0.46 !important; }
     nav a { padding: 0.45rem 0.75rem; font-size: 0.82rem; }
   }
   @media (prefers-reduced-motion: reduce) {

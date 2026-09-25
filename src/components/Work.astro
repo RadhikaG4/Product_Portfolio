@@ -7,8 +7,9 @@ import { mainProjects, url } from '../data/projects.js';
 import { icon } from '../data/icons.js';
 
 ---
-<section class="work" id="work" aria-label="Work">
-  <div class="stage" style={`--bg: url(${bg.src})`}>
+<section class="work" aria-label="Work">
+  <!-- id sits on the desktop, not the section, so the Work link lands with the desktop filling the screen -->
+  <div class="stage" id="work" style={`--bg: url(${bg.src})`}>
     <ul class="folders">
       {mainProjects.map((p, i) => (
         <li style={`--x:${[125, 305, 493][i]}; --i:${i}`}>
