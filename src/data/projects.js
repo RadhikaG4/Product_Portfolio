@@ -3,7 +3,6 @@
 
 // Window shape (Work section): lede, tags, overview, role, highlights, tools, results, learnings,
 // hero (1920x600) and gallery (4 x [image, caption]). Images live in public/work/. Empty image = gradient placeholder.
-// caseUrl (optional) sends "Open full case study" to an outside page instead of /work/<slug>/.
 const img = (name) => `/work/${name}.webp`;
 
 export const mainProjects = [
@@ -34,7 +33,6 @@ export const mainProjects = [
   },
   {
     slug: 'country-delight', short: 'Country Delight', name: 'Country Delight', tag: 'Live Project, ISB', period: 'One-month live project',
-    caseUrl: 'https://radhikagoel27.github.io/CD-Reward-Points',
     window: {
       lede: 'Getting people who trust Country Delight for milk to try everything else.',
       tags: ['Consumer Research', 'Loyalty Design', 'D2C'],

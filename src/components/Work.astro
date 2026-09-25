@@ -3,7 +3,7 @@
 // a taskbar, and a cursor label. Clicking a folder opens its project window.
 // Window copy comes from mainProjects[].window in src/data/projects.js.
 import bg from '../assets/work-bg.webp';
-import { mainProjects, url } from '../data/projects.js';
+import { mainProjects } from '../data/projects.js';
 import { icon } from '../data/icons.js';
 
 ---
@@ -106,7 +106,6 @@ import { icon } from '../data/icons.js';
             <section><h4>Results</h4><p>{p.window.results}</p></section>
             <section><h4>What I Learned</h4><p>{p.window.learnings}</p></section>
           </div>
-          <a class="open" href={p.caseUrl ?? url(`work/${p.slug}/`)} target={p.caseUrl ? '_blank' : undefined} rel="noopener">Open full case study ↗</a>
         </div>
       </article>
     ))}
@@ -322,8 +321,6 @@ import { icon } from '../data/icons.js';
   .gallery .ph { width: 100%; aspect-ratio: 4 / 3; }
   img.ph { display: block; width: 100%; object-fit: cover; }
   figcaption { margin-top: calc(8 * var(--u)); color: #9a9aa6; font-size: calc(12 * var(--u)); line-height: 1.4; }
-  .open { display: inline-block; margin-top: calc(30 * var(--u)); padding: calc(8 * var(--u)) calc(16 * var(--u)); border: 1px solid #7c5cff; font-size: calc(15 * var(--u)); transition: background 0.2s; }
-  .open:hover { background: #7c5cff; }
 
   /* Tablets in portrait and phones: taller desktop, folders in a row, windows full width */
   @media (max-width: 800px) {

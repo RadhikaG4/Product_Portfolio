@@ -111,8 +111,7 @@ const links = [
   const nav = document.querySelector<HTMLElement>('.site-header nav')!;
   const pill = nav.querySelector<HTMLElement>('.pill')!;
   const links = [...nav.querySelectorAll<HTMLAnchorElement>('a')];
-  // Only the home page has all sections; elsewhere highlight Work
-  const sections = document.getElementById('home') ? (links.map((a) => document.getElementById(a.dataset.id!)).filter(Boolean) as HTMLElement[]) : [];
+  const sections = links.map((a) => document.getElementById(a.dataset.id!)).filter(Boolean) as HTMLElement[];
 
   const setActive = (id: string) => {
     const a = links.find((l) => l.dataset.id === id);
@@ -137,11 +136,11 @@ const links = [
     root.classList.toggle('scrolled', scrollY > 10);
     const r = desk?.getBoundingClientRect();
     root.classList.toggle('nav-hidden', !!r && r.top < 60 && r.bottom > 60);
-    if (sections.length) spy();
+    spy();
     ticking = false;
   };
   addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
-  addEventListener('resize', () => sections.length && spy());
-  document.fonts?.ready.then(() => (sections.length ? spy() : setActive('work')));
+  addEventListener('resize', spy);
+  document.fonts?.ready.then(spy);
   onScroll();
 </script>
