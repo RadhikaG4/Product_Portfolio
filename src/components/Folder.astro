@@ -1,18 +1,16 @@
 ---
 // Resume folder lying on the table, tied by a string to a pin off-screen. Drag it anywhere within reach.
-import { icon } from '../data/icons.js';
 const education = [
   ['Indian School of Business', 'PGP YL, IT and Operations', "Jun '25 to Feb '27"],
   ['Thapar Institute of Engineering', 'B.E. Computer Engineering', "Oct '21 to May '25"],
 ];
-const doing = ['Product strategy and execution', 'User research and discovery', 'AI and data products', 'Prototyping and user testing'];
-const skills = ['SQL', 'Tableau', 'Figma', 'Excel', 'User Research', 'Scrum', 'Pendo'];
+const doing = ['User research and discovery', 'Data analysis', 'Prototyping and user testing', 'Product strategy and execution'];
+const skills = ['SQL', 'Tableau', 'Figma', 'Excel', 'User Research', 'Wireframing'];
 const experience = [
   ['Digital Strategy Intern', 'Tata Consumer Products', "Apr to May '26", 'AI-led outlet expansion, ~600 stores onboarded in 2 months'],
   ['Software Development Intern', 'JP Morgan Chase', "Jan to Jun '25", 'Anomaly detection for $5bn+ portfolios'],
   ['Summer Intern, PPO', 'JP Morgan Chase', "Jun to Aug '24", 'Real-time data pipelines across 10 sources'],
 ];
-const projects = [['MakeMyTrip', 'Top-of-funnel features'], ['Paytm', 'UPI adoption and churn']];
 const paper = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .28 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E";
 ---
 <div class="hang" style={`--paper: url("${paper}")`}>
@@ -52,21 +50,12 @@ const paper = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' widt
         </section>
       </div>
       <div class="col">
-        <section>
+        <section class="exp">
           <header><span class="n">05/</span><h2>Experience</h2>
             <svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2" /><path d="M9 7V5h6v2M3 12h18" /></svg></header>
           <ul class="jobs">
             {experience.map(([role, co, when, note]) => (
               <li><strong>{role} / {co}</strong><span>{when}</span><p>{note}</p></li>
-            ))}
-          </ul>
-        </section>
-        <section>
-          <header><span class="n">06/</span><h2>Projects</h2>
-            <svg viewBox="0 0 24 24"><path d={icon.folder} /></svg></header>
-          <ul class="thumbs">
-            {projects.map(([name, note]) => (
-              <li><div class="img"><svg viewBox="0 0 24 24"><path d="M3 18l6-7 4 5 3-3 5 5z" /><circle cx="15" cy="7" r="2" /></svg></div><strong>{name}</strong><span>{note}</span></li>
             ))}
           </ul>
         </section>
@@ -137,7 +126,7 @@ const paper = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' widt
   .row + .row { margin-top: 0.45rem; }
   .row div { display: grid; }
   .row strong { font-weight: 600; }
-  .row span, .row em, .jobs span, .thumbs span { color: #555; font-style: normal; }
+  .row span, .row em, .jobs span { color: #555; font-style: normal; }
   .row em { white-space: nowrap; }
 
   ul { list-style: none; margin: 0; padding: 0; }
@@ -146,17 +135,16 @@ const paper = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' widt
   .pills { display: flex; flex-wrap: wrap; gap: 0.45rem; }
   .pills li { padding: 0.3rem 0.8rem; border-radius: 999px; background: rgba(0, 0, 0, 0.09); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12); font-size: 0.7rem; }
 
-  .jobs { display: grid; gap: 0.5rem; }
-  .jobs li { position: relative; display: grid; padding-left: 1.5rem; font-size: 0.74rem; line-height: 1.35; }
-  .jobs li::before { top: 0.45em; }
+  /* Experience: vertical timeline running to the bottom of the folder */
+  .exp { flex: 1; display: flex; flex-direction: column; }
+  .jobs { position: relative; flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 1rem; padding: 0.4rem 0 0.2rem; }
+  .jobs::before { content: ""; position: absolute; left: 4px; top: 0.9rem; bottom: 0.6rem; border-left: 1.5px solid rgba(0, 0, 0, 0.35); }
+  .jobs li { position: relative; display: grid; padding-left: 1.6rem; font-size: 0.74rem; line-height: 1.35; }
+  .jobs li::before { top: 0.3em; box-shadow: 0 0 0 3px #d9d9d7; }
+  .jobs li:first-child::before { background: #6b4de6; }
   .jobs strong { font-weight: 600; }
-  .jobs p { margin: 0.15rem 0 0; color: #333; }
-
-  .thumbs { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
-  .thumbs li { display: grid; gap: 0.2rem; padding: 0.45rem 0.45rem 0.7rem; border: 1px solid rgba(0, 0, 0, 0.25); border-radius: 6px; font-size: 0.76rem; }
-  .thumbs .img { aspect-ratio: 16 / 4.2; display: grid; place-items: center; margin-bottom: 0.35rem; border-radius: 4px; background: rgba(0, 0, 0, 0.14); }
-  .thumbs svg { width: 26px; fill: rgba(0, 0, 0, 0.45); }
-  .thumbs strong { font-weight: 600; }
+  .jobs span { order: -1; margin-bottom: 0.15rem; font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.06em; text-transform: uppercase; }
+  .jobs p { margin: 0.2rem 0 0; color: #333; }
 
   /* Eyelet the cord ties into */
   .grommet {

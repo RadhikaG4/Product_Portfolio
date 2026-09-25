@@ -85,7 +85,7 @@ import { icon } from '../data/icons.js';
               <p class="pw-lede">{p.window.lede}</p>
               <ul class="chips">{p.window.tags.map((t) => <li>{t}</li>)}</ul>
             </div>
-            {p.window.hero ? <img class="ph hero-ph" src={p.window.hero} alt="" /> : <div class="ph hero-ph" aria-label="Image placeholder"></div>}
+            {p.window.hero ? <img class="ph hero-ph" src={p.window.hero} alt={p.window.lede} loading="lazy" /> : <div class="ph hero-ph" aria-label="Image placeholder"></div>}
           </div>
           <div class="pw-grid">
             <section><h4>Overview</h4><p>{p.window.overview}</p></section>
@@ -94,13 +94,18 @@ import { icon } from '../data/icons.js';
             <section><h4>Tools &amp; Technologies</h4><ul class="chips">{p.window.tools.map((t) => <li>{t}</li>)}</ul></section>
           </div>
           <div class="gallery">
-            {p.window.gallery.map((src, n) => (src ? <img class="ph" src={src} alt="" /> : <div class={`ph im${n + 1}`} aria-label="Image placeholder"></div>))}
+            {p.window.gallery.map(([src, cap], n) => (
+              <figure>
+                {src ? <img class="ph" src={src} alt={cap} loading="lazy" /> : <div class={`ph im${n + 1}`} aria-label="Image placeholder"></div>}
+                <figcaption>{cap}</figcaption>
+              </figure>
+            ))}
           </div>
           <div class="pw-grid">
             <section><h4>Results</h4><p>{p.window.results}</p></section>
             <section><h4>What I Learned</h4><p>{p.window.learnings}</p></section>
           </div>
-          <a class="open" href={url(`work/${p.slug}/`)}>Open full case study ↗</a>
+          <a class="open" href={p.caseUrl ?? url(`work/${p.slug}/`)} target={p.caseUrl ? '_blank' : undefined} rel="noopener">Open full case study ↗</a>
         </div>
       </article>
     ))}
@@ -307,7 +312,10 @@ import { icon } from '../data/icons.js';
   .bullets li { position: relative; padding-left: calc(28 * var(--u)); margin-bottom: calc(4 * var(--u)); }
   .bullets li::before { content: ""; position: absolute; left: calc(3 * var(--u)); top: 0.45em; width: calc(10 * var(--u)); height: calc(10 * var(--u)); border-radius: 50%; background: #7c5cff; }
   .gallery { display: grid; grid-template-columns: repeat(4, 1fr); gap: calc(18 * var(--u)); margin: calc(28 * var(--u)) calc(-14 * var(--u)) calc(8 * var(--u)); }
-  .gallery .ph { aspect-ratio: 286 / 136; }
+  .gallery figure { margin: 0; }
+  .gallery .ph { width: 100%; aspect-ratio: 4 / 3; }
+  img.ph { display: block; width: 100%; object-fit: cover; }
+  figcaption { margin-top: calc(8 * var(--u)); color: #9a9aa6; font-size: calc(12 * var(--u)); line-height: 1.4; }
   .open { display: inline-block; margin-top: calc(30 * var(--u)); padding: calc(8 * var(--u)) calc(16 * var(--u)); border: 1px solid #7c5cff; font-size: calc(15 * var(--u)); transition: background 0.2s; }
   .open:hover { background: #7c5cff; }
 

@@ -6,7 +6,6 @@ import { email, phone, linkedin } from '../data/projects.js';
 import { icon } from '../data/icons.js';
 
 const details = [
-  ['Role', 'Product Manager'],
   ['Location', 'Hyderabad, India'],
 ];
 const contacts = [
@@ -74,7 +73,7 @@ const tools = ['figma', 'sql', 'tableau', 'excel', 'pendo'];
       <article class="intro" style={`--grain: url("${grain}")`}>
         <p class="num">01/</p>
         <h1>Hi, I'm <em>Radhika Goel</em></h1>
-        <p class="body">Placeholder introduction. A line on my background, the problems I like to solve and the kind of product work I want to do next.</p>
+        <p class="body">I love listening to user problems and working out solutions to them. Next, I want to build AI and data products that make everyday work simpler for the people who use them.</p>
         <p class="chev" aria-hidden="true"><span>›</span><span>›</span><span>›</span></p>
         <svg class="orbit" viewBox="0 0 200 120" aria-hidden="true">
           <g transform="rotate(-32 100 60)">
@@ -262,7 +261,7 @@ const tools = ['figma', 'sql', 'tableau', 'excel', 'pendo'];
     animation: name-sheen 7.5s ease-in-out infinite;
   }
   @keyframes name-sheen { 0%, 100% { background-position: 100% 0; } 50% { background-position: 0 0; } }
-  .body { position: relative; max-width: 30rem; margin: 0.7rem 0 0; color: #b9b9bd; font-family: var(--font-inter); font-size: 0.95rem; }
+  .body { position: relative; max-width: min(30rem, 58%); margin: 0.7rem 0 0; color: #b9b9bd; font-family: var(--font-inter); font-size: 0.95rem; }
   .chev { display: flex; gap: 0.35rem; margin: 0.6rem 0 0; font-size: 1.3rem; line-height: 1; color: #b9b9bd; }
   .chev span { animation: chev 2s ease-in-out infinite; }
   .chev span:nth-child(2) { animation-delay: 0.15s; }
@@ -281,6 +280,7 @@ const tools = ['figma', 'sql', 'tableau', 'excel', 'pendo'];
   @media (max-width: 767.98px) {
     .intro { width: 100%; margin-left: 0; padding: 1.6rem; transform: rotate(3deg); }
     .orbit, .plus { opacity: 0.5; }
+    .body { max-width: none; }
   }
 </style>
 

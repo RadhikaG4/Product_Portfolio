@@ -7,7 +7,7 @@ If the resume changes, update this file first, then the site.
 - Name: Radhika Goel
 - LinkedIn: linkedin.com/in/radhikagoel4
 - Phone: +91 8447032640
-- Email: TBC (Radhika's GitHub email, to be confirmed)
+- Email: goelradhika2704@gmail.com
 
 ## Education
 - Indian School of Business, PGP YL, intended major IT and Operations, 100% Merit Scholar. Jun 2025 to Feb 2027.
