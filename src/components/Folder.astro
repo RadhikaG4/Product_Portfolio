@@ -88,7 +88,7 @@ const paper = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' widt
     --hy: 90px;
     position: relative;
     padding-top: 28px;
-    transform-origin: var(--hx) var(--hy);
+    transform-origin: 50% 50%;
     cursor: grab;
     user-select: none;
     touch-action: pan-y;
@@ -178,147 +178,165 @@ const paper = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' widt
 </style>
 
 <script>
+  // Top-down view: the folder lies on a table, tied by a string to a pin off-screen.
+  // It slides with friction and stays where it is dropped; the string only stops it when taut.
   const hang = document.querySelector<HTMLElement>('.hang')!;
   const folder = hang.querySelector<HTMLElement>('.folder')!;
   const [shadow, cord, twist] = hang.querySelectorAll<SVGPathElement>('.rope path');
-  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Folder body: offset from rest (x, y), rotation (a) around the eyelet, plus velocities.
-  const f = { x: 0, y: 0, a: 0, vx: 0, vy: 0, va: 0 };
-  const FREE = 220; // pulls up to this far track the pointer 1:1, then resist
-  let hole = { x: 0, y: 0 }; // eyelet at rest, in .hang coordinates
-  let anchor = { x: 0, y: 0 }; // hook, off to the top right
-  let ropeLen = 0;
+  type V = { x: number; y: number };
+  const b = { x: 0, y: 0, a: 0, vx: 0, vy: 0, va: 0 }; // offset from start, angle, velocities
+  let C0: V = { x: 0, y: 0 }; // centre at start, in .hang coordinates
+  let E: V = { x: 0, y: 0 }; // eyelet relative to centre, unrotated
+  let pin: V = { x: 0, y: 0 };
+  let L = 0; // string length
+  let m = 1, I = 1; // mass and moment of inertia
 
-  // Cord as a verlet chain between hook and eyelet.
-  const N = 18;
-  let pts: { x: number; y: number; px: number; py: number }[] = [];
+  const rot = (p: V, a: number): V => ({ x: p.x * Math.cos(a) - p.y * Math.sin(a), y: p.x * Math.sin(a) + p.y * Math.cos(a) });
+  const toWorld = (local: V): V => { const r = rot(local, b.a); return { x: C0.x + b.x + r.x, y: C0.y + b.y + r.y }; };
+
+  const N = 20;
+  let pts: (V & { px: number; py: number })[] = [];
 
   const measure = () => {
+    const w = folder.offsetWidth, h = folder.offsetHeight;
+    C0 = { x: w / 2, y: h / 2 };
+    // Eyelet position from layout (offsets ignore transforms)
+    const sheet = folder.querySelector<HTMLElement>('.sheet')!;
+    const eyelet = folder.querySelector<HTMLElement>('.grommet')!;
+    const hx = sheet.offsetLeft + eyelet.offsetLeft + eyelet.offsetWidth / 2;
+    const hy = sheet.offsetTop + eyelet.offsetTop + eyelet.offsetHeight / 2;
+    E = { x: hx - C0.x, y: hy - C0.y };
+    m = (w * h) / 1e4;
+    I = (m * (w * w + h * h)) / 12;
     const r = hang.getBoundingClientRect();
-    const cs = getComputedStyle(folder);
-    const [ox, oy] = cs.transformOrigin.split(' ').map(parseFloat);
-    hole = { x: ox, y: oy };
-    anchor = { x: Math.max(hole.x + 140, innerWidth - r.left + 30), y: hole.y - 260 };
-    ropeLen = Math.hypot(anchor.x - hole.x, anchor.y - hole.y) * 1.12;
+    const e0 = { x: C0.x + E.x, y: C0.y + E.y };
+    pin = { x: Math.max(e0.x + 140, innerWidth - r.left + 30), y: e0.y - 260 };
+    const D = Math.hypot(pin.x - e0.x, pin.y - e0.y);
+    L = D * 1.6;
+    // String starts lying in a loose curve on the table
     pts = Array.from({ length: N }, (_, i) => {
       const t = i / (N - 1);
-      const x = anchor.x + (hole.x - anchor.x) * t;
-      const y = anchor.y + (hole.y - anchor.y) * t;
+      const bow = Math.sin(t * Math.PI) * D * 0.28;
+      const x = pin.x + (e0.x - pin.x) * t - bow * 0.5;
+      const y = pin.y + (e0.y - pin.y) * t + bow;
       return { x, y, px: x, py: y };
     });
   };
 
-  let drag: { id: number; sx: number; sy: number; fx: number; fy: number; lx: number; ly: number; t: number } | null = null;
+  let drag: { id: number; r: V; p: V } | null = null; // r = grab point relative to centre, unrotated
 
   folder.addEventListener('pointerdown', (e) => {
     if (e.button !== 0) return;
-    drag = { id: e.pointerId, sx: e.clientX, sy: e.clientY, fx: f.x, fy: f.y, lx: e.clientX, ly: e.clientY, t: performance.now() };
+    e.preventDefault(); // no text selection or auto-scroll while dragging
+    const hr = hang.getBoundingClientRect();
+    const p = { x: e.clientX - hr.left, y: e.clientY - hr.top };
+    const d = { x: p.x - (C0.x + b.x), y: p.y - (C0.y + b.y) };
+    drag = { id: e.pointerId, r: rot(d, -b.a), p };
     folder.setPointerCapture(e.pointerId);
     folder.classList.add('dragging');
     wake();
   });
   folder.addEventListener('pointermove', (e) => {
     if (!drag || e.pointerId !== drag.id) return;
-    const now = performance.now();
-    const dt = Math.max(16, now - drag.t);
-    // Pointer velocity feeds the swing
-    f.vx = ((e.clientX - drag.lx) / dt) * 16;
-    f.vy = ((e.clientY - drag.ly) / dt) * 16;
-    drag.lx = e.clientX; drag.ly = e.clientY; drag.t = now;
+    const hr = hang.getBoundingClientRect();
+    drag.p = { x: e.clientX - hr.left, y: e.clientY - hr.top };
   });
   const release = (e: PointerEvent) => {
     if (!drag || e.pointerId !== drag.id) return;
-    folder.classList.remove('dragging');
     drag = null;
+    folder.classList.remove('dragging');
   };
   folder.addEventListener('pointerup', release);
   folder.addEventListener('pointercancel', release);
 
-  // Free near home, then a rubber band that stiffens the further you pull.
-  const band = (d: number) => {
-    const a = Math.abs(d);
-    return a < FREE ? d : Math.sign(d) * (FREE + (160 * (a - FREE)) / (160 + a - FREE));
-  };
+  const cross = (a: V, c: V) => a.x * c.y - a.y * c.x;
 
   const step = () => {
     if (drag) {
-      const tx = drag.fx + band(drag.lx - drag.sx);
-      const ty = drag.fy + band(drag.ly - drag.sy);
-      f.x += (tx - f.x) * 0.3;
-      f.y += (ty - f.y) * 0.3;
+      // Pull the grabbed point towards the pointer; off-centre pulls turn the folder
+      const r = rot(drag.r, b.a);
+      const g = { x: C0.x + b.x + r.x, y: C0.y + b.y + r.y };
+      const F = { x: (drag.p.x - g.x) * 0.9 * m, y: (drag.p.y - g.y) * 0.9 * m };
+      b.vx += F.x / m * 0.25;
+      b.vy += F.y / m * 0.25;
+      b.va += (cross(r, F) / I) * 0.05; // gentle turn, like sliding paper by a corner
+      b.vx *= 0.7; b.vy *= 0.7; b.va *= 0.6;
     } else {
-      // Spring back to the rest pose
-      // Soft spring plus gravity-like pull down: it bobs and swings before settling
-      f.vx = (f.vx - f.x * 0.022) * 0.95;
-      f.vy = (f.vy - f.y * 0.026 + (f.y < 0 ? 0.25 : 0)) * 0.94;
-      f.x += f.vx;
-      f.y += f.vy;
+      // Table friction
+      b.vx *= 0.86; b.vy *= 0.86; b.va *= 0.84;
     }
-    // Keep the eyelet within cord reach of the hook
-    const hx = hole.x + f.x, hy = hole.y + f.y;
-    const d = Math.hypot(hx - anchor.x, hy - anchor.y);
-    if (d > ropeLen) {
-      const k = ropeLen / d;
-      f.x = anchor.x + (hx - anchor.x) * k - hole.x;
-      f.y = anchor.y + (hy - anchor.y) * k - hole.y;
+    b.x += b.vx; b.y += b.vy; b.a += b.va;
+
+    // String: the eyelet can't go further than L from the pin
+    for (let k = 0; k < 3; k++) {
+      const re = rot(E, b.a);
+      const e = { x: C0.x + b.x + re.x, y: C0.y + b.y + re.y };
+      const dx = e.x - pin.x, dy = e.y - pin.y;
+      const d = Math.hypot(dx, dy);
+      if (d <= L) break;
+      const n = { x: dx / d, y: dy / d };
+      const rn = cross(re, n);
+      const lam = (d - L) / (1 / m + (rn * rn) / I);
+      b.x -= (n.x * lam) / m;
+      b.y -= (n.y * lam) / m;
+      b.a -= (rn * lam) / I;
+      // Remove outward velocity so it doesn't bounce off the end of the string
+      const vOut = b.vx * n.x + b.vy * n.y;
+      if (vOut > 0) { b.vx -= n.x * vOut; b.vy -= n.y * vOut; }
     }
-    // Hanging from the eyelet: sideways motion swings it, then it settles level
-    const target = Math.max(-0.35, Math.min(0.35, -f.x * 0.0016 - f.vx * 0.02));
-    f.va = (f.va + (target - f.a) * 0.05) * 0.9;
-    f.a += f.va;
 
-    folder.style.transform = `translate3d(${f.x}px, ${f.y}px, 0) rotate(${f.a}rad)`;
-    simulateRope(hx, hy);
+    folder.style.transform = `translate3d(${b.x}px, ${b.y}px, 0) rotate(${b.a}rad)`;
+    const eye = toWorld(E);
+    const ropeMoving = simulateRope(eye);
 
-    const moving = drag || Math.abs(f.x) + Math.abs(f.y) + Math.abs(f.vx) + Math.abs(f.vy) > 0.05 || Math.abs(f.va) + Math.abs(f.a) > 0.0005 || ropeMoving;
+    const moving = drag || Math.abs(b.vx) + Math.abs(b.vy) > 0.02 || Math.abs(b.va) > 0.0002 || ropeMoving;
     if (moving) requestAnimationFrame(step);
     else running = false;
   };
 
-  let ropeMoving = false;
-  const seg = () => ropeLen / (N - 1);
-  const simulateRope = (ex: number, ey: number) => {
+  // String lying on the table: no gravity, friction, and it can't stretch
+  const simulateRope = (end: V) => {
     let motion = 0;
     for (const p of pts) {
-      const vx = (p.x - p.px) * 0.97, vy = (p.y - p.py) * 0.97;
+      const vx = (p.x - p.px) * 0.8, vy = (p.y - p.py) * 0.8;
       p.px = p.x; p.py = p.y;
-      p.x += vx; p.y += vy + 0.9;
+      p.x += vx; p.y += vy;
       motion += Math.abs(vx) + Math.abs(vy);
     }
-    const L = seg();
-    for (let k = 0; k < 14; k++) {
-      pts[0].x = anchor.x; pts[0].y = anchor.y;
-      pts[N - 1].x = ex; pts[N - 1].y = ey;
+    const seg = L / (N - 1);
+    for (let k = 0; k < 16; k++) {
+      pts[0].x = pin.x; pts[0].y = pin.y;
+      pts[N - 1].x = end.x; pts[N - 1].y = end.y;
       for (let i = 0; i < N - 1; i++) {
-        const a = pts[i], b = pts[i + 1];
-        const dx = b.x - a.x, dy = b.y - a.y;
+        const a = pts[i], c = pts[i + 1];
+        const dx = c.x - a.x, dy = c.y - a.y;
         const dist = Math.hypot(dx, dy) || 1;
-        const diff = ((dist - L) / dist) * 0.5;
+        if (dist <= seg) continue; // slack string keeps its shape; it only resists stretching
+        const diff = ((dist - seg) / dist) * 0.5;
         if (i > 0) { a.x += dx * diff; a.y += dy * diff; }
-        if (i + 1 < N - 1) { b.x -= dx * diff; b.y -= dy * diff; }
+        if (i + 1 < N - 1) { c.x -= dx * diff; c.y -= dy * diff; }
       }
     }
-    // A little bending stiffness so the cord curves instead of kinking
     for (let i = 1; i < N - 1; i++) {
-      pts[i].x += ((pts[i - 1].x + pts[i + 1].x) / 2 - pts[i].x) * 0.3;
-      pts[i].y += ((pts[i - 1].y + pts[i + 1].y) / 2 - pts[i].y) * 0.3;
+      pts[i].x += ((pts[i - 1].x + pts[i + 1].x) / 2 - pts[i].x) * 0.06;
+      pts[i].y += ((pts[i - 1].y + pts[i + 1].y) / 2 - pts[i].y) * 0.06;
     }
-    ropeMoving = motion > 0.4;
-    // Smooth path through the points
-    let dStr = `M${pts[0].x},${pts[0].y}`;
+    let d = `M${pts[0].x},${pts[0].y}`;
     for (let i = 1; i < N - 1; i++) {
       const mx = (pts[i].x + pts[i + 1].x) / 2, my = (pts[i].y + pts[i + 1].y) / 2;
-      dStr += ` Q${pts[i].x},${pts[i].y} ${mx},${my}`;
+      d += ` Q${pts[i].x},${pts[i].y} ${mx},${my}`;
     }
-    dStr += ` L${ex},${ey}`;
-    for (const p of [shadow, cord, twist]) p.setAttribute('d', dStr);
+    d += ` L${end.x},${end.y}`;
+    for (const p of [shadow, cord, twist]) p.setAttribute('d', d);
+    return motion > 0.3;
   };
 
   let running = false;
   const wake = () => { if (!running) { running = true; requestAnimationFrame(step); } };
 
-  const reset = () => { measure(); if (still) { for (let i = 0; i < 120; i++) simulateRope(hole.x, hole.y); } wake(); };
+  // Keep where the folder is on resize, just re-measure the pin
+  const reset = () => { measure(); simulateRope(toWorld(E)); wake(); };
   addEventListener('resize', reset);
   document.fonts?.ready.then(reset);
   reset();

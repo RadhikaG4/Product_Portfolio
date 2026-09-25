@@ -14,6 +14,8 @@ const contacts = [
   { icon: 'in', text: linkedin.replace('https://', ''), href: linkedin },
 ];
 // Tools from the resume. Glyphs are simple marks, not official logos.
+// Light film grain so the glass reads like frosted material
+const grain = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .13 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E";
 const tools = ['figma', 'sql', 'tableau', 'excel', 'pendo'];
 ---
 <section class="hero" aria-label="Introduction">
@@ -68,7 +70,7 @@ const tools = ['figma', 'sql', 'tableau', 'excel', 'pendo'];
     </aside>
 
     <div class="stage">
-      <article class="intro">
+      <article class="intro" style={`--grain: url("${grain}")`}>
         <p class="num">01/</p>
         <h1>Hi, I'm <em>Radhika Goel</em></h1>
         <p class="body">Placeholder introduction. A line on my background, the problems I like to solve and the kind of product work I want to do next.</p>
@@ -195,10 +197,11 @@ const tools = ['figma', 'sql', 'tableau', 'excel', 'pendo'];
     margin-left: 4%;
     padding: 1.8rem 2.4rem 1.6rem;
     border-radius: 22px;
-    transform: rotate(4deg);
+    transform: rotate(2deg);
     transition: transform 0.6s var(--ease-reveal), border-color 0.5s, box-shadow 0.5s;
     color: #fff;
     background:
+      var(--grain),
       linear-gradient(rgba(120, 150, 255, 0.07) 1px, transparent 1px) 0 0 / 28px 28px,
       linear-gradient(90deg, rgba(120, 150, 255, 0.07) 1px, transparent 1px) 0 0 / 28px 28px,
       linear-gradient(135deg, rgba(30, 50, 110, 0.55), rgba(8, 12, 30, 0.55) 55%, rgba(20, 30, 70, 0.5));
@@ -212,7 +215,7 @@ const tools = ['figma', 'sql', 'tableau', 'excel', 'pendo'];
       0 30px 80px rgba(0, 0, 0, 0.6);
   }
   .intro:hover {
-    transform: rotate(3.2deg) translateY(-5px);
+    transform: rotate(1.6deg) translateY(-5px);
     border-color: rgba(160, 190, 255, 0.6);
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.35),
