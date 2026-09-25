@@ -1,4 +1,5 @@
 ---
+import Logo from './Logo.astro';
 // Rotating badge: tick dial + circular text + centre mark. Spins faster on hover.
 const { top = 'EXPLORATIONS', bottom = 'PRODUCT-LED' } = Astro.props;
 ---
@@ -19,7 +20,7 @@ const { top = 'EXPLORATIONS', bottom = 'PRODUCT-LED' } = Astro.props;
       </g>
     </svg>
   </div>
-  <span class="mark">rg</span>
+  <span class="mark"><Logo size="28px" /></span>
 </div>
 
 <style>
@@ -41,7 +42,6 @@ const { top = 'EXPLORATIONS', bottom = 'PRODUCT-LED' } = Astro.props;
   .ring svg { animation: spin-ccw 4s linear infinite paused; }
   text { font-family: var(--font-inter); font-size: 10.5px; font-weight: 600; letter-spacing: 0.26em; fill: #666; }
   .stars { fill: #666; }
-  .mark { font-weight: 700; font-size: 1.4rem; line-height: 1; letter-spacing: -0.04em; }
 
   .stamp:hover .dial { opacity: 1; }
   .stamp:hover :is(.dial, .ring) svg { animation-play-state: running; }
