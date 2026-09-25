@@ -103,13 +103,14 @@ const paper = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' widt
     top: 0;
     height: 44px;
     background: #c8c8c6 var(--paper);
-    border-radius: 16px 16px 0 0;
+    border-radius: 14px 14px 0 0;
   }
   .t1 { left: 7%; width: 150px; }
   .t2 { right: 3%; width: 32%; }
-  .tab::before, .tab::after { content: ""; position: absolute; bottom: 16px; width: 24px; height: 24px; background: inherit; }
-  .t1::after { right: -12px; transform: skewX(35deg); }
-  .t2::before { left: -12px; transform: skewX(-35deg); }
+  /* Concave fillets where each tab meets the sheet */
+  .tab::before, .tab::after { content: ""; position: absolute; bottom: 16px; width: 16px; height: 16px; }
+  .tab::before { left: -16px; background: radial-gradient(circle at 0 0, transparent 15.5px, #c8c8c6 16px); }
+  .tab::after { right: -16px; background: radial-gradient(circle at 100% 0, transparent 15.5px, #c8c8c6 16px); }
 
   .sheet {
     position: relative;
@@ -184,7 +185,7 @@ const paper = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' widt
 
   // Folder body: offset from rest (x, y), rotation (a) around the eyelet, plus velocities.
   const f = { x: 0, y: 0, a: 0, vx: 0, vy: 0, va: 0 };
-  const MAX = 180; // how far it can be pulled before the cord feels taut
+  const FREE = 220; // pulls up to this far track the pointer 1:1, then resist
   let hole = { x: 0, y: 0 }; // eyelet at rest, in .hang coordinates
   let anchor = { x: 0, y: 0 }; // hook, off to the top right
   let ropeLen = 0;
@@ -199,7 +200,7 @@ const paper = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' widt
     const [ox, oy] = cs.transformOrigin.split(' ').map(parseFloat);
     hole = { x: ox, y: oy };
     anchor = { x: Math.max(hole.x + 140, innerWidth - r.left + 30), y: hole.y - 260 };
-    ropeLen = Math.hypot(anchor.x - hole.x, anchor.y - hole.y) * 1.06;
+    ropeLen = Math.hypot(anchor.x - hole.x, anchor.y - hole.y) * 1.12;
     pts = Array.from({ length: N }, (_, i) => {
       const t = i / (N - 1);
       const x = anchor.x + (hole.x - anchor.x) * t;
@@ -234,19 +235,23 @@ const paper = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' widt
   folder.addEventListener('pointerup', release);
   folder.addEventListener('pointercancel', release);
 
-  // Rubber-band: pulls ease off the further you go, capped near MAX.
-  const band = (d: number) => (MAX * d) / (MAX + Math.abs(d));
+  // Free near home, then a rubber band that stiffens the further you pull.
+  const band = (d: number) => {
+    const a = Math.abs(d);
+    return a < FREE ? d : Math.sign(d) * (FREE + (160 * (a - FREE)) / (160 + a - FREE));
+  };
 
   const step = () => {
     if (drag) {
       const tx = drag.fx + band(drag.lx - drag.sx);
       const ty = drag.fy + band(drag.ly - drag.sy);
-      f.x += (tx - f.x) * 0.35;
-      f.y += (ty - f.y) * 0.35;
+      f.x += (tx - f.x) * 0.3;
+      f.y += (ty - f.y) * 0.3;
     } else {
       // Spring back to the rest pose
-      f.vx = (f.vx - f.x * 0.045) * 0.9;
-      f.vy = (f.vy - f.y * 0.045) * 0.9;
+      // Soft spring plus gravity-like pull down: it bobs and swings before settling
+      f.vx = (f.vx - f.x * 0.022) * 0.95;
+      f.vy = (f.vy - f.y * 0.026 + (f.y < 0 ? 0.25 : 0)) * 0.94;
       f.x += f.vx;
       f.y += f.vy;
     }
@@ -259,8 +264,8 @@ const paper = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' widt
       f.y = anchor.y + (hy - anchor.y) * k - hole.y;
     }
     // Hanging from the eyelet: sideways motion swings it, then it settles level
-    const target = Math.max(-0.22, Math.min(0.22, -f.x * 0.0012 - f.vx * 0.012));
-    f.va = (f.va + (target - f.a) * 0.08) * 0.86;
+    const target = Math.max(-0.35, Math.min(0.35, -f.x * 0.0016 - f.vx * 0.02));
+    f.va = (f.va + (target - f.a) * 0.05) * 0.9;
     f.a += f.va;
 
     folder.style.transform = `translate3d(${f.x}px, ${f.y}px, 0) rotate(${f.a}rad)`;
@@ -278,7 +283,7 @@ const paper = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' widt
     for (const p of pts) {
       const vx = (p.x - p.px) * 0.97, vy = (p.y - p.py) * 0.97;
       p.px = p.x; p.py = p.y;
-      p.x += vx; p.y += vy + 0.35;
+      p.x += vx; p.y += vy + 0.9;
       motion += Math.abs(vx) + Math.abs(vy);
     }
     const L = seg();
@@ -293,6 +298,11 @@ const paper = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' widt
         if (i > 0) { a.x += dx * diff; a.y += dy * diff; }
         if (i + 1 < N - 1) { b.x -= dx * diff; b.y -= dy * diff; }
       }
+    }
+    // A little bending stiffness so the cord curves instead of kinking
+    for (let i = 1; i < N - 1; i++) {
+      pts[i].x += ((pts[i - 1].x + pts[i + 1].x) / 2 - pts[i].x) * 0.3;
+      pts[i].y += ((pts[i - 1].y + pts[i + 1].y) / 2 - pts[i].y) * 0.3;
     }
     ropeMoving = motion > 0.4;
     // Smooth path through the points

@@ -1,5 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import Folder from './Folder.astro';
+import photo from '../assets/radhika.jpg';
 import { email, phone, linkedin } from '../data/projects.js';
 
 const details = [
@@ -17,7 +19,7 @@ const tools = ['figma', 'sql', 'tableau', 'excel', 'pendo'];
 <section class="hero" aria-label="Introduction">
   <div class="grid container">
     <aside class="profile">
-      <div class="photo" role="img" aria-label="Photo of Radhika Goel (placeholder)"><span>Photo</span></div>
+      <div class="photo"><Image src={photo} alt="Radhika Goel" width={360} loading="eager" /></div>
 
       <ul class="chips">
         <li>+ Product Strategy</li>
@@ -88,7 +90,7 @@ const tools = ['figma', 'sql', 'tableau', 'excel', 'pendo'];
   .hero {
     position: relative;
     min-height: 100svh;
-    padding-block: calc(var(--nav-h) + 1rem) 4rem;
+    padding-block: calc(var(--nav-h) + 1rem) 2.5rem;
     background: radial-gradient(60rem 30rem at 60% 12%, rgba(40, 80, 255, 0.14), transparent 70%), #000;
     overflow: clip;
   }
@@ -97,21 +99,20 @@ const tools = ['figma', 'sql', 'tableau', 'excel', 'pendo'];
   /* Left profile column */
   .profile { font-family: var(--font-mono); font-size: 0.83rem; color: #e6e6e6; }
   .photo {
-    aspect-ratio: 376 / 300;
+    aspect-ratio: 376 / 318;
+    overflow: hidden;
     border-radius: 24px;
-    display: grid;
-    place-items: center;
-    background: linear-gradient(160deg, #3a3a3a, #1b1b1b);
-    color: #777;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 0.5s var(--ease-reveal), box-shadow 0.5s, border-color 0.5s;
   }
+  .photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s var(--ease-reveal), filter 0.5s; filter: saturate(0.92); }
+  .photo:hover { transform: translateY(-3px); border-color: rgba(120, 150, 255, 0.45); box-shadow: 0 18px 50px rgba(40, 90, 255, 0.25); }
+  .photo:hover img { transform: scale(1.04); filter: saturate(1.05); }
   .chips { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.1rem 0 1rem; padding: 0; }
   .chips li { padding: 0.35rem 0.8rem; border-radius: 999px; background: #141414; border: 1px solid #222; }
   .details { margin: 0; }
   .details div { display: flex; align-items: baseline; gap: 0.6rem; padding-block: 0.4rem; }
   .details dt { color: #9a9a9a; }
-  .details dt::after { content: ""; }
   .details div::before { content: ""; order: 1; flex: 1; border-bottom: 1px dotted #333; }
   .details dd { order: 2; margin: 0; }
   .status { color: #4ade80; }
@@ -195,6 +196,7 @@ const tools = ['figma', 'sql', 'tableau', 'excel', 'pendo'];
     padding: 1.8rem 2.4rem 1.6rem;
     border-radius: 22px;
     transform: rotate(5deg);
+    transition: transform 0.6s var(--ease-reveal), border-color 0.5s, box-shadow 0.5s;
     color: #fff;
     background:
       linear-gradient(rgba(120, 150, 255, 0.07) 1px, transparent 1px) 0 0 / 28px 28px,
@@ -209,6 +211,27 @@ const tools = ['figma', 'sql', 'tableau', 'excel', 'pendo'];
       -18px 0 50px -10px rgba(40, 90, 255, 0.45),
       0 30px 80px rgba(0, 0, 0, 0.6);
   }
+  .intro:hover {
+    transform: rotate(4deg) translateY(-6px);
+    border-color: rgba(160, 190, 255, 0.6);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      inset 0 0 50px rgba(60, 100, 255, 0.2),
+      -22px 0 70px -10px rgba(40, 90, 255, 0.6),
+      0 40px 90px rgba(0, 0, 0, 0.6);
+  }
+  /* Spotlight that follows the pointer */
+  .intro::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(16rem circle at var(--mx, 50%) var(--my, 50%), rgba(140, 170, 255, 0.16), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+  }
+  .intro:hover::after { opacity: 1; }
   /* Blue light bleeding in from the left edge */
   .intro::before {
     content: "";
@@ -219,8 +242,23 @@ const tools = ['figma', 'sql', 'tableau', 'excel', 'pendo'];
     pointer-events: none;
   }
   .num { margin: 0 0 0.6rem; color: #6d8cff; font-family: var(--font-mono); font-size: 0.85rem; text-decoration: underline; text-underline-offset: 4px; }
-  h1 { position: relative; margin: 0; font-family: var(--font-inter); font-weight: 500; font-size: clamp(1.9rem, 3vw, 2.7rem); line-height: 1.15; letter-spacing: -0.01em; }
-  h1 em { font-style: normal; color: #5b86ff; }
+  h1 { position: relative; margin: 0; font-family: var(--font-inter); font-weight: 500; font-size: clamp(1.7rem, 2.4vw, 2.2rem); line-height: 1.1; letter-spacing: -0.01em; color: #dfe4f2; }
+  h1 em {
+    display: block;
+    margin-top: 0.2rem;
+    font-style: normal;
+    font-weight: 700;
+    font-size: clamp(2.6rem, 4.6vw, 4.2rem);
+    letter-spacing: -0.035em;
+    line-height: 1;
+    background: linear-gradient(100deg, #4f7dff 0%, #8fb2ff 30%, #e8efff 45%, #8fb2ff 60%, #4f7dff 100%) 0 0 / 250% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 18px rgba(70, 120, 255, 0.45));
+    animation: name-sheen 6s ease-in-out infinite;
+  }
+  @keyframes name-sheen { 0%, 100% { background-position: 100% 0; } 50% { background-position: 0 0; } }
   .body { position: relative; max-width: 30rem; margin: 1rem 0 0; color: #c9cedb; font-family: var(--font-inter); font-size: 1rem; }
   .chev { display: flex; gap: 0.35rem; margin: 1rem 0 0; font-size: 1.4rem; line-height: 1; color: #c9cedb; }
   .chev span { animation: chev 1.6s ease-in-out infinite; }
@@ -252,6 +290,13 @@ const tools = ['figma', 'sql', 'tableau', 'excel', 'pendo'];
       setTimeout(() => b.classList.remove('done'), 1200);
     }),
   );
+
+  const intro = document.querySelector<HTMLElement>('.hero .intro')!;
+  intro.addEventListener('pointermove', (e) => {
+    const r = intro.getBoundingClientRect();
+    intro.style.setProperty('--mx', `${e.clientX - r.left}px`);
+    intro.style.setProperty('--my', `${e.clientY - r.top}px`);
+  });
 
   // Tool tiles tilt and catch light where the pointer is
   document.querySelectorAll<HTMLElement>('.hero .tool').forEach((t) => {
