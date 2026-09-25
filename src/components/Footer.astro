@@ -1,0 +1,23 @@
+---
+import { email, phone, linkedin } from '../data/projects.js';
+---
+<footer class="footer" id="contact">
+  <div class="container">
+    <p class="label">contact</p>
+    <p class="note">Placeholder: contact section design to come.</p>
+    <ul>
+      <li><a href={`mailto:${email}`}>{email}</a></li>
+      <li><a href={`tel:${phone.replace(/\s/g, '')}`}>{phone}</a></li>
+      <li><a href={linkedin} target="_blank" rel="noopener">LinkedIn</a></li>
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .footer { padding-block: 5.33333rem; border-top: 1px solid rgba(255, 255, 255, 0.15); }
+  .label { margin-bottom: 0.5rem; font-weight: 600; font-size: 0.88889rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-muted); }
+  .note { color: #555; }
+  ul { list-style: none; margin: 1.5rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; }
+  a { text-decoration: underline; text-underline-offset: 0.14em; }
+  a:hover { color: #bdbdbd; }
+</style>

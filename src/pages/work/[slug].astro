@@ -1,0 +1,24 @@
+---
+import Base from '../../layouts/Base.astro';
+import { mainProjects, url } from '../../data/projects.js';
+
+export const getStaticPaths = () => mainProjects.map((project) => ({ params: { slug: project.slug }, props: { project } }));
+const { project } = Astro.props;
+---
+<Base title={`${project.name} | Radhika Goel`}>
+  <article class="case container">
+    <a class="back" href={url('#work')}>← all work</a>
+    <p class="tag">{project.tag}</p>
+    <h1>{project.name}</h1>
+    <p class="note">Case study placeholder. Content for this page will be added next.</p>
+  </article>
+</Base>
+
+<style>
+  .case { min-height: 80svh; padding-top: calc(var(--nav-h) + 3rem); padding-bottom: 5rem; }
+  .back { color: var(--c-muted); transition: color 0.2s var(--ease-swift); }
+  .back:hover { color: #fff; }
+  .tag { margin: 3rem 0 0.5rem; font-weight: 600; font-size: 0.88889rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-muted); }
+  h1 { margin: 0; font-weight: 600; font-size: clamp(2.5rem, 7vw, 5.33333rem); line-height: 1.05; letter-spacing: -0.03em; }
+  .note { margin-top: 2rem; color: #555; }
+</style>

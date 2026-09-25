@@ -1,0 +1,50 @@
+---
+// Rotating badge: tick dial + circular text + centre mark. Spins faster on hover.
+const { top = 'EXPLORATIONS', bottom = 'PRODUCT-LED' } = Astro.props;
+---
+<div class="stamp" aria-hidden="true">
+  <div class="dial">
+    <svg viewBox="0 0 140 140" width="140" height="140">
+      <circle cx="70" cy="70" r="64" fill="none" stroke="currentColor" stroke-width="9" stroke-dasharray="1.5 6.5" />
+    </svg>
+  </div>
+  <div class="ring">
+    <svg viewBox="0 0 104 104" width="104" height="104">
+      <path id="stamp-path" d="M52 11a41 41 0 1 1-.01 0" fill="none" />
+      <text text-anchor="middle"><textPath href="#stamp-path" startOffset="25%">{top}</textPath></text>
+      <text text-anchor="middle"><textPath href="#stamp-path" startOffset="75%">{bottom}</textPath></text>
+      <g class="stars">
+        <path transform="translate(48.2 7.6) scale(.16)" d="M41.7 8.2l4.6 8.3-17.8 7.4 17.9 7.3-4.8 8.6-15.5-11.3 2 19.3h-9.6l1.9-19.3L5 39.9 0 31.2l17.8-7.4L0 16.6l4.7-8.5 15.9 11.4L18.6 0h9.7l-2.2 19.5z" />
+        <path transform="translate(48.2 89.1) scale(.16)" d="M41.7 8.2l4.6 8.3-17.8 7.4 17.9 7.3-4.8 8.6-15.5-11.3 2 19.3h-9.6l1.9-19.3L5 39.9 0 31.2l17.8-7.4L0 16.6l4.7-8.5 15.9 11.4L18.6 0h9.7l-2.2 19.5z" />
+      </g>
+    </svg>
+  </div>
+  <span class="mark">rg</span>
+</div>
+
+<style>
+  .stamp {
+    position: relative;
+    flex: none;
+    width: 140px;
+    height: 140px;
+    display: grid;
+    place-items: center;
+    color: #000;
+  }
+  .dial, .ring { position: absolute; }
+  .dial { inset: 0; opacity: 0.55; animation: spin-cw 30s linear infinite; transition: opacity 0.3s var(--ease-swift); }
+  .ring { inset: 18px; animation: spin-ccw 18s linear infinite; }
+  /* Inner svgs carry a second, faster spin that only runs on hover */
+  .dial svg, .ring svg { display: block; }
+  .dial svg { animation: spin-cw 3.2s linear infinite paused; }
+  .ring svg { animation: spin-ccw 4s linear infinite paused; }
+  text { font-family: var(--font-inter); font-size: 10.5px; font-weight: 600; letter-spacing: 0.26em; fill: #666; }
+  .stars { fill: #666; }
+  .mark { font-weight: 700; font-size: 1.4rem; line-height: 1; letter-spacing: -0.04em; }
+
+  .stamp:hover .dial { opacity: 1; }
+  .stamp:hover :is(.dial, .ring) svg { animation-play-state: running; }
+  .stamp:hover .mark { animation: pulse 0.9s ease-in-out infinite; }
+  @keyframes pulse { 50% { transform: scale(1.14); } }
+</style>

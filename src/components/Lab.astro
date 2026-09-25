@@ -1,0 +1,105 @@
+---
+import Stamp from './Stamp.astro';
+import { sideProjects, url } from '../data/projects.js';
+---
+<section class="lab" id="lab" style={`--cursor: url(${url('pixel-cursor.svg')})`}>
+  <div class="container">
+    <div class="head">
+      <div class="head-text">
+        <h2 class="outline-title">the lab</h2>
+        <p class="sub">Placeholder: smaller projects, pro bono work and product teardowns, done alongside the main work.</p>
+      </div>
+      <Stamp />
+    </div>
+
+    <ul class="rows">
+      {sideProjects.map((p) => (
+        <li>
+          <details>
+            <summary>
+              <span class="title">{p.name}</span>
+              <svg class="arrow" viewBox="0 0 24 24" width="48" height="48" aria-hidden="true">
+                <path d="M7 17 17 7M7 7h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </summary>
+            <div class="body">
+              <p class="tag">{p.tag}</p>
+              <p>Placeholder description. One or two lines on the problem, what was done and the outcome will go here.</p>
+            </div>
+          </details>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .lab {
+    --stroke: rgba(0, 0, 0, 0.85);
+    position: relative;
+    background: var(--c-lab);
+    color: #000;
+    padding-block: 7.11111rem;
+    cursor: var(--cursor) 0 0, auto;
+  }
+  .head { display: flex; align-items: flex-start; justify-content: space-between; gap: 3.55556rem; margin-bottom: 5.33333rem; }
+  .head-text { display: flex; flex-direction: column; gap: 0.88889rem; }
+  .sub { margin: 0; max-width: 35.4rem; font-family: var(--font-inter); font-size: 1.33333rem; line-height: normal; }
+
+  .rows { list-style: none; margin: 0; padding: 0; border-top: 1px solid rgba(0, 0, 0, 0.35); }
+  .rows li { border-bottom: 1px solid rgba(0, 0, 0, 0.35); }
+
+  details { interpolate-size: allow-keywords; }
+  details::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition: block-size 0.45s var(--ease-reveal), content-visibility 0.45s allow-discrete;
+  }
+  details[open]::details-content { block-size: auto; }
+
+  summary {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding-block: 2.22222rem;
+    padding-right: 8px;
+    list-style: none;
+    cursor: pointer;
+    transition: color 0.3s var(--ease-swift);
+  }
+  summary::-webkit-details-marker { display: none; }
+  /* Black fill wipes up from the bottom on hover */
+  summary::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #000;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.38s var(--ease-reveal);
+  }
+  .title { position: relative; font-weight: 600; font-size: clamp(1.8rem, 3.4vw, 2.66667rem); line-height: normal; transition: transform 0.35s var(--ease-reveal); }
+  .arrow { position: relative; flex: none; transition: transform 0.3s var(--ease-reveal); }
+  details[open] .arrow { transform: rotate(90deg); }
+
+  @media (hover: hover) {
+    summary:hover { color: #d2d3d5; }
+    summary:hover::before { transform: scaleY(1); transform-origin: bottom; }
+    summary:hover .title { transform: translateX(40px); transition-delay: 0.08s; }
+    summary:hover .arrow { transform: translateX(-40px); transition-delay: 0.08s; }
+    details[open] summary:hover .arrow { transform: translateX(-40px) rotate(90deg); }
+  }
+
+  .body { max-width: 42rem; padding: 0.5rem 0 2.22222rem; font-family: var(--font-inter); font-size: 1.11111rem; }
+  .tag { margin-bottom: 0.5rem; font-weight: 600; font-size: 0.88889rem; letter-spacing: 0.08em; text-transform: uppercase; color: #666; }
+
+  @media (max-width: 767.98px) {
+    .lab { padding-block: 4rem 5rem; }
+    .head { flex-direction: column; gap: 2.5rem; margin-bottom: 3rem; }
+    .sub { font-size: 1.11111rem; }
+    summary { padding-block: 1.5rem; }
+    .arrow { width: 36px; height: 36px; }
+  }
+</style>

@@ -1,0 +1,111 @@
+---
+import { mainProjects, url } from '../data/projects.js';
+---
+<section class="work" id="work">
+  <div class="container">
+    <h2 class="outline-title">work</h2>
+    <ul class="cards">
+      {mainProjects.map((p, i) => (
+        <li>
+          <a class="card" href={url(`work/${p.slug}/`)}>
+            <div class="media"><span>Visual placeholder</span></div>
+            <div class="meta">
+              <span class="index">0{i + 1}</span>
+              <h3>{p.name}</h3>
+              <p>{p.tag}. Placeholder one-line outcome for this case study.</p>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+  <!-- Arrow orb that trails the cursor over the cards -->
+  <div class="orb" aria-hidden="true">
+    <svg viewBox="0 0 40 40" width="40" height="40"><path d="M11.7 28.3 28.3 11.7M28.3 25V11.7H15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+  </div>
+</section>
+
+<style>
+  .work { padding-block: 7.11111rem; }
+  .cards { list-style: none; margin: 4.88889rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 4.88889rem; }
+  .card { display: grid; gap: 1.33333rem; }
+  .media {
+    aspect-ratio: 16 / 7;
+    display: grid;
+    place-items: center;
+    border-radius: 4px;
+    background: #1f1f1f;
+    color: #555;
+    font-size: 0.88889rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: opacity 0.3s var(--ease-swift);
+  }
+  .meta { display: grid; grid-template-columns: auto 1fr; column-gap: 1.33333rem; align-items: baseline; }
+  .index { color: var(--c-muted); font-weight: 500; }
+  h3 { margin: 0; font-weight: 600; font-size: clamp(1.6rem, 3vw, 2.22222rem); line-height: 1.2; }
+  .meta p { grid-column: 2; margin: 0.4rem 0 0; color: var(--c-muted); font-size: 1.11111rem; }
+
+  .orb {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 88px;
+    height: 88px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #fff;
+    color: #000;
+    mix-blend-mode: difference;
+    pointer-events: none;
+    z-index: 150;
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+  :global(html.orb-on) .media { cursor: none; }
+  @media (hover: none), (prefers-reduced-motion: reduce) { .orb { display: none; } }
+  @media (max-width: 767.98px) { .work { padding-block: 4rem 5rem; } .cards { margin-top: 3rem; gap: 3rem; } }
+</style>
+
+<script>
+  const orb = document.querySelector<HTMLElement>('.work .orb');
+  const cards = document.querySelector<HTMLElement>('.work .cards');
+
+  if (orb && cards && matchMedia('(hover: hover) and (prefers-reduced-motion: no-preference)').matches) {
+    document.documentElement.classList.add('orb-on');
+    // Spring-follow: position eases toward the pointer, scale/opacity toward the target state.
+    const s = { x: 0, y: 0, vx: 0, vy: 0, tx: 0, ty: 0, o: 0, to: 0, live: false, started: false };
+    const R = 44;
+    const tick = () => {
+      s.vx = (s.vx + (s.tx - s.x) * 0.2) * 0.62;
+      s.vy = (s.vy + (s.ty - s.y) * 0.2) * 0.62;
+      s.x += s.vx;
+      s.y += s.vy;
+      s.o += (s.to - s.o) * 0.16;
+      orb.style.transform = `translate3d(${s.x - R}px, ${s.y - R}px, 0) scale(${0.4 + 0.6 * s.o})`;
+      orb.style.opacity = String(s.o);
+      if (Math.abs(s.vx) + Math.abs(s.vy) > 0.05 || Math.abs(s.to - s.o) > 0.01 || s.to > 0) requestAnimationFrame(tick);
+      else { s.live = false; if (!s.to) orb.style.opacity = '0'; }
+    };
+    const run = () => { if (!s.live) { s.live = true; requestAnimationFrame(tick); } };
+    const show = (on: boolean) => () => { s.to = on ? 1 : 0; run(); };
+
+    cards.addEventListener('mousemove', (e) => {
+      s.tx = e.clientX;
+      s.ty = e.clientY;
+      if (!s.started) { s.x = s.tx; s.y = s.ty; s.started = true; }
+      run();
+    }, { passive: true });
+    // Scrolling moves content under a still pointer, so re-check what it is over.
+    addEventListener('scroll', () => {
+      if (!s.started) return;
+      s.to = document.elementFromPoint(s.tx, s.ty)?.closest('.work .media') ? 1 : 0;
+      run();
+    }, { passive: true });
+    cards.querySelectorAll('.media').forEach((m) => {
+      m.addEventListener('mouseenter', show(true));
+      m.addEventListener('mouseleave', show(false));
+    });
+  }
+</script>

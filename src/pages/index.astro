@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+import Work from '../components/Work.astro';
+import Lab from '../components/Lab.astro';
+---
+<Base>
+  <section class="hero" aria-label="Introduction">
+    <p>Hero placeholder: about summary to come.</p>
+  </section>
+  <Work />
+  <Lab />
+</Base>
+
+<style>
+  .hero { min-height: 100svh; display: grid; place-items: center; padding: var(--nav-h) var(--container-pad) 0; color: #555; }
+</style>
