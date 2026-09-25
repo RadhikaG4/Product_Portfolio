@@ -76,7 +76,7 @@ const tools = ['figma', 'sql', 'tableau', 'excel', 'pendo'];
         <svg class="orbit" viewBox="0 0 200 120" aria-hidden="true">
           <g transform="rotate(-32 100 60)">
             <path id="orbit-path" d="M8 60a92 40 0 1 0 184 0a92 40 0 1 0-184 0" />
-            <circle r="5"><animateMotion dur="9s" repeatCount="indefinite"><mpath href="#orbit-path" /></animateMotion></circle>
+            <circle r="5"><animateMotion dur="11s" repeatCount="indefinite"><mpath href="#orbit-path" /></animateMotion></circle>
           </g>
         </svg>
         <span class="plus" aria-hidden="true">+</span>
@@ -195,7 +195,7 @@ const tools = ['figma', 'sql', 'tableau', 'excel', 'pendo'];
     margin-left: 4%;
     padding: 1.8rem 2.4rem 1.6rem;
     border-radius: 22px;
-    transform: rotate(5deg);
+    transform: rotate(4deg);
     transition: transform 0.6s var(--ease-reveal), border-color 0.5s, box-shadow 0.5s;
     color: #fff;
     background:
@@ -208,16 +208,16 @@ const tools = ['figma', 'sql', 'tableau', 'excel', 'pendo'];
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.25),
       inset 0 0 40px rgba(60, 100, 255, 0.12),
-      -18px 0 50px -10px rgba(40, 90, 255, 0.45),
+      -16px 0 44px -10px rgba(40, 90, 255, 0.36),
       0 30px 80px rgba(0, 0, 0, 0.6);
   }
   .intro:hover {
-    transform: rotate(4deg) translateY(-6px);
+    transform: rotate(3.2deg) translateY(-5px);
     border-color: rgba(160, 190, 255, 0.6);
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.35),
       inset 0 0 50px rgba(60, 100, 255, 0.2),
-      -22px 0 70px -10px rgba(40, 90, 255, 0.6),
+      -20px 0 60px -10px rgba(40, 90, 255, 0.48),
       0 40px 90px rgba(0, 0, 0, 0.6);
   }
   /* Spotlight that follows the pointer */
@@ -251,23 +251,23 @@ const tools = ['figma', 'sql', 'tableau', 'excel', 'pendo'];
     font-size: clamp(2.6rem, 4.6vw, 4.2rem);
     letter-spacing: -0.035em;
     line-height: 1;
-    background: linear-gradient(100deg, #4f7dff 0%, #8fb2ff 30%, #e8efff 45%, #8fb2ff 60%, #4f7dff 100%) 0 0 / 250% 100%;
+    background: linear-gradient(100deg, #4f7dff 0%, #8fb2ff 30%, #d6e2ff 45%, #8fb2ff 60%, #4f7dff 100%) 0 0 / 250% 100%;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 18px rgba(70, 120, 255, 0.45));
-    animation: name-sheen 6s ease-in-out infinite;
+    filter: drop-shadow(0 0 14px rgba(70, 120, 255, 0.36));
+    animation: name-sheen 7.5s ease-in-out infinite;
   }
   @keyframes name-sheen { 0%, 100% { background-position: 100% 0; } 50% { background-position: 0 0; } }
   .body { position: relative; max-width: 30rem; margin: 1rem 0 0; color: #c9cedb; font-family: var(--font-inter); font-size: 1rem; }
   .chev { display: flex; gap: 0.35rem; margin: 1rem 0 0; font-size: 1.4rem; line-height: 1; color: #c9cedb; }
-  .chev span { animation: chev 1.6s ease-in-out infinite; }
+  .chev span { animation: chev 2s ease-in-out infinite; }
   .chev span:nth-child(2) { animation-delay: 0.15s; }
   .chev span:nth-child(3) { animation-delay: 0.3s; }
-  @keyframes chev { 0%, 100% { opacity: 0.35; transform: none; } 40% { opacity: 1; transform: translateX(3px); } }
+  @keyframes chev { 0%, 100% { opacity: 0.45; transform: none; } 40% { opacity: 0.9; transform: translateX(2.4px); } }
   .orbit { position: absolute; right: 6%; top: 50%; width: 30%; max-width: 13rem; transform: translateY(-50%); overflow: visible; }
   .orbit path { fill: none; stroke: #3b6bff; stroke-width: 1.2; }
-  .orbit circle { fill: #3b82ff; filter: drop-shadow(0 0 6px #3b82ff); }
+  .orbit circle { fill: #3b82ff; filter: drop-shadow(0 0 5px #3b82ff); }
   .plus { position: absolute; right: 4%; top: 52%; color: #5b86ff; font-size: 1.8rem; font-weight: 300; line-height: 1; }
 
   @media (max-width: 1100px) {
