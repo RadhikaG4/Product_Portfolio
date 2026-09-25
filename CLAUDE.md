@@ -13,16 +13,18 @@ Branch: `claude/eager-archimedes-00gdqw`.
 - No em dashes in copy.
 
 ## Structure
-- Home (`src/pages/index.astro`): hero (placeholder, photo to add), Work (3 cards), the lab (side projects as dropdown rows), contact footer.
+- Home (`src/pages/index.astro`): hero (photo, glass intro, draggable resume folder), bento, Work, the lab (side projects as dropdown rows), contact footer.
+- Work (`src/components/Work.astro`): retro desktop scaled from a 1672x941 reference (background art `src/assets/work-bg.webp`). Folders fan papers on hover; click opens an in-desktop project window (placeholder content, scrollable, expand button). Taskbar is decorative.
 - Case studies (`src/pages/work/[slug].astro`): TCPL, JP Morgan Chase, Country Delight. Snapshot box then problem, research, insight, options, solution, results, learnings.
 - Side projects: Novartis, Forus Health, AI Build Lab, MakeMyTrip, Paytm. Elective Planner is removed.
 - Data: `src/data/projects.js`. Single pager: header = logo + tagline left, pill nav right (Home, Work, Lab, Contact) that scrolls to sections, bar hides on scroll down and returns with layered blur on scroll up.
 - Below hero: achievements bento. Footer: halftone panel (black dots fading to lab bg) with flowers and name.
 
 ## Design reference
-aucadian.com.au, especially its Lab section. Copied behaviours: layered blur on scroll-up, rotating stamp that speeds up on hover, pixel cursor in lab, arrow orb over work cards, row fill on hover. Lab background plain light (no pixel video).
+aucadian.com.au, especially its Lab section. Copied behaviours: layered blur on scroll-up, rotating stamp that speeds up on hover, pixel cursor in lab, row fill on hover. Lab background plain light (no pixel video).
 
 ## Open items
 - Stamp ring text (placeholder: EXPLORATIONS / PRODUCT-LED).
 - Real email. Resume link in menu (ask before publishing PDF).
+- Shared icon paths: `src/data/icons.js`.
 - Research report: `reports/PM portfolio structure principles.md`.

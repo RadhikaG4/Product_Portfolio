@@ -85,6 +85,7 @@ p:last-child { margin-bottom: 0; }
   .outline-title { font-size: 5rem; line-height: 0.78; -webkit-text-stroke-width: 1px; }
 }
 
+@keyframes blink { 50% { opacity: 0.3; } }
 @keyframes spin-cw { to { transform: rotate(360deg); } }
 @keyframes spin-ccw { to { transform: rotate(-360deg); } }
 

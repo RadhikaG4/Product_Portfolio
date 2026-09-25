@@ -1,5 +1,6 @@
 ---
-// Resume folder that hangs on a cord from a hook off-screen. Drag it; it swings back.
+// Resume folder lying on the table, tied by a string to a pin off-screen. Drag it anywhere within reach.
+import { icon } from '../data/icons.js';
 const education = [
   ['Indian School of Business', 'PGP YL, IT and Operations', "Jun '25 to Feb '27"],
   ['Thapar Institute of Engineering', 'B.E. Computer Engineering', "Oct '21 to May '25"],
@@ -62,7 +63,7 @@ const paper = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' widt
         </section>
         <section>
           <header><span class="n">06/</span><h2>Projects</h2>
-            <svg viewBox="0 0 24 24"><path d="M3 6h6l2 2h10v11H3z" /></svg></header>
+            <svg viewBox="0 0 24 24"><path d={icon.folder} /></svg></header>
           <ul class="thumbs">
             {projects.map(([name, note]) => (
               <li><div class="img"><svg viewBox="0 0 24 24"><path d="M3 18l6-7 4 5 3-3 5 5z" /><circle cx="15" cy="7" r="2" /></svg></div><strong>{name}</strong><span>{note}</span></li>
