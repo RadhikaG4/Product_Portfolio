@@ -1,8 +1,8 @@
 // Single source for project names and links. Copy is placeholder until final text arrives.
 export const mainProjects = [
-  { slug: 'tata-consumer-products', name: 'Tata Consumer Products', tag: 'Digital Strategy Intern' },
-  { slug: 'jp-morgan-chase', name: 'JP Morgan Chase', tag: 'Software Development Intern' },
-  { slug: 'country-delight', name: 'Country Delight', tag: 'Live Project' },
+  { slug: 'tata-consumer-products', name: 'Tata Consumer Products', tag: 'Digital Strategy Intern', period: 'Apr to May 2026' },
+  { slug: 'jp-morgan-chase', name: 'JP Morgan Chase', tag: 'Software Development Intern', period: 'Jan to Jun 2025' },
+  { slug: 'country-delight', name: 'Country Delight', tag: 'Live Project, ISB', period: 'Placeholder dates' },
 ];
 
 export const sideProjects = [

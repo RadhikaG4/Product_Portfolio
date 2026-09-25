@@ -7,7 +7,7 @@ import { sideProjects, url } from '../data/projects.js';
     <div class="head">
       <div class="head-text">
         <h2 class="outline-title">the lab</h2>
-        <p class="sub">Placeholder: smaller projects, pro bono work and product teardowns, done alongside the main work.</p>
+        <p class="sub">Placeholder intro. A line on the smaller projects, pro bono work and product teardowns done alongside the main work.</p>
       </div>
       <Stamp />
     </div>
@@ -23,8 +23,8 @@ import { sideProjects, url } from '../data/projects.js';
               </svg>
             </summary>
             <div class="body">
-              <p class="tag">{p.tag}</p>
-              <p>Placeholder description. One or two lines on the problem, what was done and the outcome will go here.</p>
+              <p class="eyebrow">{p.tag}</p>
+              <p>Placeholder description. The problem in one line, what I did about it in another, and the outcome with a number.</p>
             </div>
           </details>
         </li>
@@ -93,7 +93,7 @@ import { sideProjects, url } from '../data/projects.js';
   }
 
   .body { max-width: 42rem; padding: 0.5rem 0 2.22222rem; font-family: var(--font-inter); font-size: 1.11111rem; }
-  .tag { margin-bottom: 0.5rem; font-weight: 600; font-size: 0.88889rem; letter-spacing: 0.08em; text-transform: uppercase; color: #666; }
+  .eyebrow { color: #666; }
 
   @media (max-width: 767.98px) {
     .lab { padding-block: 4rem 5rem; }

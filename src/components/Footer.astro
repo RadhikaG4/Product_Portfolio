@@ -3,21 +3,24 @@ import { email, phone, linkedin } from '../data/projects.js';
 ---
 <footer class="footer" id="contact">
   <div class="container">
-    <p class="label">contact</p>
-    <p class="note">Placeholder: contact section design to come.</p>
+    <p class="eyebrow">contact</p>
+    <h2>Placeholder sign-off line.</h2>
+    <p class="note">Placeholder: one line on the roles and conversations I am open to.</p>
     <ul>
       <li><a href={`mailto:${email}`}>{email}</a></li>
       <li><a href={`tel:${phone.replace(/\s/g, '')}`}>{phone}</a></li>
       <li><a href={linkedin} target="_blank" rel="noopener">LinkedIn</a></li>
     </ul>
+    <p class="fine">© {new Date().getFullYear()} Radhika Goel</p>
   </div>
 </footer>
 
 <style>
-  .footer { padding-block: 5.33333rem; border-top: 1px solid rgba(255, 255, 255, 0.15); }
-  .label { margin-bottom: 0.5rem; font-weight: 600; font-size: 0.88889rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-muted); }
-  .note { color: #555; }
-  ul { list-style: none; margin: 1.5rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; }
-  a { text-decoration: underline; text-underline-offset: 0.14em; }
+  .footer { padding-block: 5.33333rem 2.66667rem; border-top: 1px solid rgba(255, 255, 255, 0.15); }
+  h2 { margin: 0 0 1rem; font-weight: 600; font-size: clamp(2rem, 5vw, 3.55556rem); line-height: 1.1; letter-spacing: -0.03em; }
+  .note { color: var(--c-muted); font-size: 1.11111rem; }
+  ul { list-style: none; margin: 2rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; }
+  a { text-decoration: underline; text-underline-offset: 0.14em; transition: color 0.2s var(--ease-swift); }
   a:hover { color: #bdbdbd; }
+  .fine { margin-top: 4rem; color: #555; font-size: 0.88889rem; }
 </style>

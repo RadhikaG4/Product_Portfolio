@@ -56,6 +56,16 @@ p:last-child { margin-bottom: 0; }
   padding-inline: var(--container-pad);
 }
 
+/* Small uppercase label used above headings and in meta rows */
+.eyebrow {
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+  font-size: 0.88889rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+}
+
 /* Big outlined lowercase heading shared by section titles */
 .outline-title {
   margin: 0;

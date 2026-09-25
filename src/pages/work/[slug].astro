@@ -2,23 +2,90 @@
 import Base from '../../layouts/Base.astro';
 import { mainProjects, url } from '../../data/projects.js';
 
-export const getStaticPaths = () => mainProjects.map((project) => ({ params: { slug: project.slug }, props: { project } }));
-const { project } = Astro.props;
+export const getStaticPaths = () =>
+  mainProjects.map((project, i) => ({
+    params: { slug: project.slug },
+    props: { project, next: mainProjects[(i + 1) % mainProjects.length] },
+  }));
+const { project, next } = Astro.props;
+
+// Case study skeleton from the portfolio research: result-first snapshot, then the decision trail.
+const snapshot = [
+  ['Role', project.tag],
+  ['Timeline', project.period],
+  ['Team', 'Placeholder'],
+  ['Tools', 'Placeholder'],
+];
+const sections = [
+  ['The problem', 'Placeholder. What was broken, who it hurt and the evidence that it mattered.'],
+  ['Research', 'Placeholder. Who I spoke to, what data I looked at and how.'],
+  ['The insight', 'Placeholder. The finding that changed the direction of the work.'],
+  ['Options considered', 'Placeholder. The two or three approaches on the table and the trade-offs between them.'],
+  ['What I built', 'Placeholder. The chosen solution and why it beat the alternatives.'],
+  ['Results', 'Placeholder. Outcomes against a baseline, labelled as actual or projected.'],
+  ['What I learned', 'Placeholder. What I would do differently and what comes next.'],
+];
 ---
 <Base title={`${project.name} | Radhika Goel`}>
   <article class="case container">
     <a class="back" href={url('#work')}>← all work</a>
-    <p class="tag">{project.tag}</p>
-    <h1>{project.name}</h1>
-    <p class="note">Case study placeholder. Content for this page will be added next.</p>
+
+    <header class="intro">
+      <p class="eyebrow">{project.tag}</p>
+      <h1>{project.name}</h1>
+      <p class="headline">Placeholder headline stating the outcome, not the topic.</p>
+    </header>
+
+    <dl class="snapshot">
+      {snapshot.map(([k, v]) => <div><dt class="eyebrow">{k}</dt><dd>{v}</dd></div>)}
+      <div class="outcome"><dt class="eyebrow">Outcome</dt><dd>Placeholder headline metric with its baseline.</dd></div>
+    </dl>
+
+    {sections.map(([title, body]) => (
+      <section class="block">
+        <h2>{title}</h2>
+        <p>{body}</p>
+      </section>
+    ))}
+
+    <a class="next" href={url(`work/${next.slug}/`)}>
+      <span class="eyebrow">Next case study</span>
+      <span class="next-name">{next.name} →</span>
+    </a>
   </article>
 </Base>
 
 <style>
-  .case { min-height: 80svh; padding-top: calc(var(--nav-h) + 3rem); padding-bottom: 5rem; }
+  .case { padding-block: calc(var(--nav-h) + 3rem) 6rem; }
   .back { color: var(--c-muted); transition: color 0.2s var(--ease-swift); }
-  .back:hover { color: #fff; }
-  .tag { margin: 3rem 0 0.5rem; font-weight: 600; font-size: 0.88889rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-muted); }
+  .back:hover, .next:hover .next-name { color: #fff; }
+
+  .intro { margin: 3rem 0 3.5rem; }
   h1 { margin: 0; font-weight: 600; font-size: clamp(2.5rem, 7vw, 5.33333rem); line-height: 1.05; letter-spacing: -0.03em; }
-  .note { margin-top: 2rem; color: #555; }
+  .headline { max-width: 40rem; margin-top: 1.5rem; color: var(--c-muted); font-size: clamp(1.11111rem, 2vw, 1.44444rem); }
+
+  .snapshot {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem 2rem;
+    margin: 0 0 5rem;
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+  }
+  .snapshot dd { margin: 0; }
+  .outcome { grid-column: 1 / -1; padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.15); }
+  .outcome dd { font-weight: 600; font-size: 1.33333rem; }
+
+  .block { display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; padding-block: 2.5rem; border-top: 1px solid rgba(255, 255, 255, 0.15); }
+  h2 { margin: 0; font-weight: 600; font-size: 1.33333rem; }
+  .block p { max-width: 40rem; color: var(--c-muted); font-size: 1.11111rem; }
+
+  .next { display: grid; margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid rgba(255, 255, 255, 0.15); }
+  .next-name { font-weight: 600; font-size: clamp(1.8rem, 4vw, 2.66667rem); color: var(--c-muted); transition: color 0.2s var(--ease-swift); }
+
+  @media (max-width: 767.98px) {
+    .snapshot { grid-template-columns: 1fr 1fr; padding: 1.5rem; }
+    .block { grid-template-columns: 1fr; gap: 0.75rem; }
+  }
 </style>
