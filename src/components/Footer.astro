@@ -1,26 +1,123 @@
 ---
 import { email, phone, linkedin } from '../data/projects.js';
+
+// Flowers on the panel's top edge. d = daisy, t = tulip, c = cluster of small daisies.
+const flowers = [
+  { k: 'c', h: 74 }, { k: 't', h: 66 }, { k: 'd', h: 92 }, { k: 'c', h: 58 },
+  { k: 't', h: 72 }, { k: 'd', h: 64 }, { k: 't', h: 80 }, { k: 'd', h: 70 },
+];
+const daisy = (cx: number, cy: number, r: number) =>
+  [0, 1, 2, 3, 4].map((i) => {
+    const a = (i / 5) * Math.PI * 2 - Math.PI / 2;
+    return `<circle cx="${cx + Math.cos(a) * r}" cy="${cy + Math.sin(a) * r}" r="${r * 0.78}"/>`;
+  }).join('') + `<circle class="eye" cx="${cx}" cy="${cy}" r="${r * 0.45}"/>`;
+const heads = {
+  d: daisy(30, 16, 9),
+  t: '<path d="M19 8c3 5 7 7 11 2 4 5 8 3 11-2 2 10-2 20-11 20S17 18 19 8z"/>',
+  c: daisy(22, 30, 6.5) + daisy(40, 18, 7),
+};
+const links = [
+  { label: linkedin.replace('https://', ''), href: linkedin, icon: 'in' },
+  { label: email, href: `mailto:${email}`, icon: 'mail' },
+  { label: phone, href: `tel:${phone.replace(/\s/g, '')}`, icon: 'phone' },
+  { label: 'Back to top', href: '#top', icon: 'up' },
+];
 ---
 <footer class="footer" id="contact">
-  <div class="container">
-    <p class="eyebrow">contact</p>
-    <h2>Placeholder sign-off line.</h2>
-    <p class="note">Placeholder: one line on the roles and conversations I am open to.</p>
-    <ul>
-      <li><a href={`mailto:${email}`}>{email}</a></li>
-      <li><a href={`tel:${phone.replace(/\s/g, '')}`}>{phone}</a></li>
-      <li><a href={linkedin} target="_blank" rel="noopener">LinkedIn</a></li>
-    </ul>
-    <p class="fine">© {new Date().getFullYear()} Radhika Goel</p>
+  <div class="top container">
+    <p>Hyderabad, India</p>
+    <p>Placeholder line</p>
+  </div>
+
+  <div class="panel-wrap container">
+    <div class="flowers" aria-hidden="true">
+      {flowers.map((f, i) => (
+        <svg viewBox="0 0 60 100" style={`height:${f.h}px; --tilt:${i % 2 ? -3 : 3}deg`}>
+          <path class="stem" d={f.k === 'c' ? 'M30 100C30 80 26 60 22 36M30 100C31 76 36 50 40 25' : 'M30 100C29 80 31 55 30 26'} />
+          <path class="leaf" d="M30 82c-10-2-16-8-17-15 8 0 14 5 17 15zM30 70c9-3 14-9 15-16-8 1-13 7-15 16z" />
+          <g set:html={heads[f.k]} />
+        </svg>
+      ))}
+    </div>
+
+    <div class="panel">
+      <ul class="links">
+        {links.map((l) => (
+          <li>
+            <a href={l.href} target={l.icon === 'in' ? '_blank' : undefined} rel="noopener">
+              <span class="ico" aria-hidden="true">
+                {l.icon === 'in' && <b>in</b>}
+                {l.icon === 'mail' && <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>}
+                {l.icon === 'phone' && <svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2" /></svg>}
+                {l.icon === 'up' && <svg viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6" /></svg>}
+              </span>
+              {l.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="name" aria-hidden="true">Radhika Goel</p>
+    </div>
   </div>
 </footer>
 
 <style>
-  .footer { padding-block: 5.33333rem 2.66667rem; border-top: 1px solid rgba(255, 255, 255, 0.15); }
-  h2 { margin: 0 0 1rem; font-weight: 600; font-size: clamp(2rem, 5vw, 3.55556rem); line-height: 1.1; letter-spacing: -0.03em; }
-  .note { color: var(--c-muted); font-size: 1.11111rem; }
-  ul { list-style: none; margin: 2rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; }
-  a { text-decoration: underline; text-underline-offset: 0.14em; transition: color 0.2s var(--ease-swift); }
-  a:hover { color: #bdbdbd; }
-  .fine { margin-top: 4rem; color: #555; font-size: 0.88889rem; }
+  .footer { --acc: #3d6bff; padding-top: 4rem; background: var(--c-page); font-family: var(--font-inter); overflow: clip; }
+  .top { display: flex; justify-content: space-between; color: #8a8f9c; font-size: 0.94rem; }
+  .top p { margin: 0; }
+
+  .panel-wrap { position: relative; max-width: none; padding-top: 5.5rem; }
+  .flowers { position: absolute; top: 0; left: 50%; display: flex; align-items: flex-end; gap: 1.4rem; transform: translateX(-50%); height: 5.6rem; }
+  .flowers svg { width: auto; fill: var(--acc); transform-origin: 50% 100%; transition: transform 0.45s var(--ease-reveal); }
+  .flowers svg:hover { transform: rotate(var(--tilt)); }
+  .stem { fill: none; stroke: var(--acc); stroke-width: 3.2; stroke-linecap: round; }
+  .flowers :global(.eye) { fill: var(--c-page); }
+
+  /* Halftone panel: solid accent at the top dissolving into dots, then into the page */
+  .panel {
+    position: relative;
+    height: clamp(22rem, 38vw, 34rem);
+    overflow: hidden;
+    border-radius: 28px 28px 0 0;
+  }
+  .panel::before, .panel::after { content: ""; position: absolute; inset: 0; pointer-events: none; }
+  .panel::before {
+    background: linear-gradient(var(--acc), rgba(61, 107, 255, 0.6) 18%, transparent 40%);
+  }
+  .panel::after {
+    background:
+      radial-gradient(circle, var(--acc) 1.6px, transparent 2px) 0 0 / 6px 6px,
+      radial-gradient(circle, rgba(61, 107, 255, 0.75) 1px, transparent 1.4px) 3px 3px / 6px 6px;
+    -webkit-mask-image: linear-gradient(#000 25%, rgba(0, 0, 0, 0.75) 60%, transparent 100%);
+    mask-image: linear-gradient(#000 25%, rgba(0, 0, 0, 0.75) 60%, transparent 100%);
+  }
+
+  .links { position: relative; z-index: 2; list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.8rem 2.8rem; margin: 0; padding: 9% 1rem 0; }
+  .links a { display: flex; align-items: center; gap: 0.5rem; color: rgba(255, 255, 255, 0.9); font-size: 1.05rem; transition: color 0.2s; }
+  .links a:hover { color: #fff; text-decoration: underline; text-underline-offset: 0.2em; }
+  .ico { display: grid; place-items: center; width: 18px; height: 18px; }
+  .ico b { font-size: 0.8rem; font-weight: 700; padding: 0 2px; border-radius: 3px; background: #fff; color: var(--acc); line-height: 1.3; }
+  .ico svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* Name in the page colour: reads as solid letters cut out of the dots */
+  .name {
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    bottom: -0.2em;
+    margin: 0;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-weight: 700;
+    font-size: clamp(5rem, 15.5vw, 16rem);
+    line-height: 1;
+    letter-spacing: -0.05em;
+    color: var(--c-page);
+  }
+
+  @media (max-width: 767.98px) {
+    .top { font-size: 0.8rem; }
+    .flowers { gap: 0.6rem; transform: translateX(-50%) scale(0.7); transform-origin: 50% 100%; }
+    .links { flex-direction: column; align-items: center; padding-top: 14%; }
+  }
 </style>

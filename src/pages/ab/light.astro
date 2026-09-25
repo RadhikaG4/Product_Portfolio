@@ -1,0 +1,37 @@
+---
+// A/B preview only: the top section on an off-white background. Not linked from the site.
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/Hero.astro';
+---
+<Base title="Light theme preview | Radhika Goel">
+  <div class="ab-light"><Hero /></div>
+</Base>
+
+<style is:global>
+  body:has(.ab-light) { background: #f4f1ea !important; }
+  body:has(.ab-light) :is(.site-header, .sticky, .menu-bar) .brand { color: #111 !important; }
+  body:has(.ab-light) .site-header .lines::before, body:has(.ab-light) .site-header .lines::after { background: #111 !important; }
+  body .ab-light .hero { background: radial-gradient(60rem 30rem at 60% 12%, rgba(61, 107, 255, 0.1), transparent 70%), #f4f1ea !important; }
+  body .ab-light .profile { color: #1b1b1b !important; }
+  body .ab-light :is(.chips li, .ico, .tools) { background: #fff !important; border-color: #e3ded3 !important; }
+  body .ab-light .details dt, body .ab-light .copy { color: #77736a !important; }
+  body .ab-light .details div::before { border-color: #cfc9bc !important; }
+  body .ab-light .label { border-color: #e3ded3 !important; }
+  body .ab-light .status { color: #15803d !important; }
+  body .ab-light .contacts a:hover { color: #000 !important; }
+  body .ab-light .tool { background: linear-gradient(145deg, #fff, #efebe3) !important; border-color: #e3ded3 !important; box-shadow: inset 0 1px 0 #fff, 0 4px 10px rgba(0, 0, 0, 0.08) !important; }
+  body .ab-light .intro {
+    color: #111 !important;
+    background: var(--grain),
+      linear-gradient(rgba(61, 107, 255, 0.08) 1px, transparent 1px) 0 0 / 28px 28px,
+      linear-gradient(90deg, rgba(61, 107, 255, 0.08) 1px, transparent 1px) 0 0 / 28px 28px,
+      linear-gradient(135deg, rgba(220, 229, 255, 0.75), rgba(255, 255, 255, 0.6) 55%, rgba(226, 234, 255, 0.7)) !important;
+    border-color: rgba(61, 107, 255, 0.3) !important;
+    box-shadow: inset 0 1px 0 #fff, -14px 0 40px -12px rgba(61, 107, 255, 0.3), 0 24px 60px rgba(30, 40, 80, 0.15) !important;
+  }
+  body .ab-light .intro h1 { color: #333 !important; }
+  body .ab-light .intro h1 em { background-image: linear-gradient(100deg, #1f47d6 0%, #3d6bff 35%, #7d9bff 50%, #3d6bff 65%, #1f47d6 100%) !important; filter: none !important; }
+  body .ab-light .intro .body, body .ab-light .chev { color: #444 !important; }
+  body .ab-light .folder { filter: drop-shadow(0 24px 30px rgba(40, 40, 60, 0.18)) !important; }
+  body .ab-light .cord-shadow { stroke: rgba(0, 0, 0, 0.15) !important; }
+</style>

@@ -1,8 +1,8 @@
 ---
 import Stamp from './Stamp.astro';
-import { sideProjects, url } from '../data/projects.js';
+import { sideProjects } from '../data/projects.js';
 ---
-<section class="lab" id="lab" style={`--cursor: url(${url('pixel-cursor.svg')})`}>
+<section class="lab" id="lab">
   <div class="container">
     <div class="head">
       <div class="head-text">
@@ -40,7 +40,6 @@ import { sideProjects, url } from '../data/projects.js';
     background: var(--c-lab);
     color: #000;
     padding-block: 7.11111rem;
-    cursor: var(--cursor) 0 0, auto;
   }
   .head { display: flex; align-items: flex-start; justify-content: space-between; gap: 3.55556rem; margin-bottom: 5.33333rem; }
   .head-text { display: flex; flex-direction: column; gap: 0.88889rem; }

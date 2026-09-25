@@ -31,6 +31,7 @@ html {
   -moz-osx-font-smoothing: grayscale;
   scroll-behavior: smooth;
   scrollbar-gutter: stable;
+  cursor: url(/pixel-cursor.svg) 0 0, auto; /* pixel arrow everywhere */
 }
 
 body {
