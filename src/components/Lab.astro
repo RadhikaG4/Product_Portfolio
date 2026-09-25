@@ -18,13 +18,13 @@ import { sideProjects } from '../data/projects.js';
           <details>
             <summary>
               <span class="title">{p.name}</span>
-              <svg class="arrow" viewBox="0 0 24 24" width="48" height="48" aria-hidden="true">
+              <svg class="arrow" viewBox="0 0 24 24" width="34" height="34" aria-hidden="true">
                 <path d="M7 17 17 7M7 7h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
             </summary>
             <div class="body">
               <p class="eyebrow">{p.tag}</p>
-              <p>Placeholder description. The problem in one line, what I did about it in another, and the outcome with a number.</p>
+              <p>{p.text}</p>
             </div>
           </details>
         </li>
@@ -39,9 +39,9 @@ import { sideProjects } from '../data/projects.js';
     position: relative;
     background: linear-gradient(var(--c-lab-top), var(--c-lab));
     color: #000;
-    padding-block: 7.11111rem;
+    padding-block: 5rem;
   }
-  .head { display: flex; align-items: flex-start; justify-content: space-between; gap: 3.55556rem; margin-bottom: 5.33333rem; }
+  .head { display: flex; align-items: flex-start; justify-content: space-between; gap: 3.55556rem; margin-bottom: 3rem; }
   .head-text { display: flex; flex-direction: column; gap: 0.88889rem; }
   .sub { margin: 0; max-width: 35.4rem; font-family: var(--font-inter); font-size: 1.33333rem; line-height: normal; }
 
@@ -62,7 +62,7 @@ import { sideProjects } from '../data/projects.js';
     align-items: center;
     justify-content: space-between;
     gap: 2rem;
-    padding-block: 2.22222rem;
+    padding-block: 1.05rem;
     padding-right: 8px;
     list-style: none;
     cursor: pointer;
@@ -79,7 +79,7 @@ import { sideProjects } from '../data/projects.js';
     transform-origin: top;
     transition: transform 0.38s var(--ease-reveal);
   }
-  .title { position: relative; font-weight: 600; font-size: clamp(1.8rem, 3.4vw, 2.66667rem); line-height: normal; transition: transform 0.35s var(--ease-reveal); }
+  .title { position: relative; font-weight: 600; font-size: clamp(1.35rem, 2.3vw, 1.9rem); line-height: 1.2; transition: transform 0.35s var(--ease-reveal); }
   .arrow { position: relative; flex: none; transition: transform 0.3s var(--ease-reveal); }
   details[open] .arrow { transform: rotate(90deg); }
 
@@ -91,7 +91,7 @@ import { sideProjects } from '../data/projects.js';
     details[open] summary:hover .arrow { transform: translateX(-40px) rotate(90deg); }
   }
 
-  .body { max-width: 42rem; padding: 0.5rem 0 2.22222rem; font-family: var(--font-inter); font-size: 1.11111rem; }
+  .body { max-width: 42rem; padding: 0.2rem 0 1.4rem; font-family: var(--font-inter); font-size: 1.11111rem; }
   .eyebrow { color: #666; }
 
   @media (prefers-reduced-motion: reduce) {
@@ -102,7 +102,7 @@ import { sideProjects } from '../data/projects.js';
     .lab { padding-block: 4rem 5rem; }
     .head { flex-direction: column; gap: 2.5rem; margin-bottom: 3rem; }
     .sub { font-size: 1.11111rem; }
-    summary { padding-block: 1.5rem; }
-    .arrow { width: 36px; height: 36px; }
+    summary { padding-block: 0.9rem; }
+    .arrow { width: 28px; height: 28px; }
   }
 </style>

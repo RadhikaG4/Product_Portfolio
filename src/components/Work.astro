@@ -1,17 +1,17 @@
 ---
 // Work as a retro desktop: three project folders, a PROJECT.EXE window between the hands,
-// a taskbar, and a cursor label. Clicking a folder opens its (placeholder) explorer window.
+// a taskbar, and a cursor label. Clicking a folder opens its project window.
+// Window copy comes from mainProjects[].window in src/data/projects.js.
 import bg from '../assets/work-bg.webp';
 import { mainProjects, url } from '../data/projects.js';
 import { icon } from '../data/icons.js';
 
-const files = ['Problem.txt', 'Research.pdf', 'Insight.doc', 'Solution.fig', 'Results.xls', 'Learnings.md'];
 ---
 <section class="work" id="work" aria-label="Work">
   <div class="stage" style={`--bg: url(${bg.src})`}>
     <ul class="folders">
       {mainProjects.map((p, i) => (
-        <li style={`--x:${[7.48, 18.24, 29.49][i]}%; --i:${i}`}>
+        <li style={`--x:${[125, 305, 493][i]}; --i:${i}`}>
           <button class="dir" data-open={p.slug} aria-haspopup="dialog">
             <span class="icon" aria-hidden="true">
               <svg class="back" viewBox="0 0 110 88"><path d="M4 16q0-7 7-7h27l9 9h52q7 0 7 7v54q0 7-7 7H11q-7 0-7-7z" /></svg>
@@ -45,7 +45,8 @@ const files = ['Problem.txt', 'Research.pdf', 'Insight.doc', 'Solution.fig', 'Re
       <div class="bar"><span>PROJECT.EXE</span><i class="min"></i><i class="max"></i><i class="x"></i></div>
     </div>
 
-    <!-- Big arrow + hint that trails the pointer; rests at its spot when the pointer leaves -->
+    <span class="hint-home" aria-hidden="true"></span>
+    <!-- Big arrow + hint that trails the pointer; rests at .hint-home when the pointer leaves -->
     <div class="hint" aria-hidden="true">
       <svg viewBox="0 0 24 34"><path d="M1.5 1.5v27l7-6.5 4.6 10 4.3-2-4.5-9.7 9.4-.6z" /></svg>
       <span>click on a folder to explore</span>
@@ -81,22 +82,23 @@ const files = ['Problem.txt', 'Research.pdf', 'Insight.doc', 'Solution.fig', 'Re
             <div>
               <p class="pw-num">0{i + 1}</p>
               <h3>{p.name}</h3>
-              <p class="pw-lede">A short, impactful one-line description of what this project is about.</p>
-              <ul class="chips"><li>Tag 1</li><li>Tag 2</li><li>Tag 3</li></ul>
+              <p class="pw-lede">{p.window.lede}</p>
+              <ul class="chips">{p.window.tags.map((t) => <li>{t}</li>)}</ul>
             </div>
-            <div class="ph hero-ph" aria-label="Image placeholder"></div>
+            {p.window.hero ? <img class="ph hero-ph" src={p.window.hero} alt="" /> : <div class="ph hero-ph" aria-label="Image placeholder"></div>}
           </div>
           <div class="pw-grid">
-            <section><h4>Overview</h4><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p></section>
-            <section><h4>My Role</h4><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p></section>
-            <section><h4>Key Highlights</h4>
-              <ul class="bullets"><li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li><li>Sed do eiusmod tempor incididunt ut labore et dolore.</li><li>Ut enim ad minim veniam, quis nostrud exercitation.</li><li>Duis aute irure dolor in reprehenderit in voluptate velit.</li></ul></section>
-            <section><h4>Tools &amp; Technologies</h4><ul class="chips"><li>Tool 1</li><li>Tool 2</li><li>Tool 3</li><li>Tool 4</li><li>Tool 5</li></ul></section>
+            <section><h4>Overview</h4><p>{p.window.overview}</p></section>
+            <section><h4>My Role</h4><p>{p.window.role}</p></section>
+            <section><h4>Key Highlights</h4><ul class="bullets">{p.window.highlights.map((h) => <li>{h}</li>)}</ul></section>
+            <section><h4>Tools &amp; Technologies</h4><ul class="chips">{p.window.tools.map((t) => <li>{t}</li>)}</ul></section>
           </div>
-          <div class="gallery">{[1, 2, 3, 4].map((n) => <div class={`ph im${n}`} aria-label="Image placeholder"></div>)}</div>
+          <div class="gallery">
+            {p.window.gallery.map((src, n) => (src ? <img class="ph" src={src} alt="" /> : <div class={`ph im${n + 1}`} aria-label="Image placeholder"></div>))}
+          </div>
           <div class="pw-grid">
-            <section><h4>Results</h4><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p></section>
-            <section><h4>What I Learned</h4><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation.</p></section>
+            <section><h4>Results</h4><p>{p.window.results}</p></section>
+            <section><h4>What I Learned</h4><p>{p.window.learnings}</p></section>
           </div>
           <a class="open" href={url(`work/${p.slug}/`)}>Open full case study ↗</a>
         </div>
@@ -108,17 +110,17 @@ const files = ['Problem.txt', 'Research.pdf', 'Insight.doc', 'Solution.fig', 'Re
 
 <style>
   .work { background: #000; overflow: hidden; font-family: var(--font-mono); color: #fff; }
-  /* Every position is a % of the 1672x941 reference, so the layout scales as one picture */
+  /* Built from a 1672x941 reference. The art covers the stage (--a = its scale, so the
+     PROJECT.EXE frame stays on it); desktop chrome is sized in --u and pinned to the edges. */
   .stage {
-    --u: 0.06cqw; /* one reference pixel */
+    --a: max(100cqw / 1672, 100cqh / 941);
+    --u: clamp(0.75px, 100cqw / 1672, 1.35px);
     position: relative;
-    width: min(100%, calc(88svh * 1672 / 941));
-    margin-inline: auto;
-    aspect-ratio: 1672 / 941;
-    container-type: inline-size;
-    background: var(--bg) center / 100% auto no-repeat;
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
-    mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+    width: 100%;
+    height: min(calc(100vw * 941 / 1672), 100svh);
+    min-height: 34rem;
+    container-type: size;
+    background: var(--bg) center / cover no-repeat;
     overflow: hidden;
     cursor: none;
   }
@@ -126,7 +128,7 @@ const files = ['Problem.txt', 'Research.pdf', 'Insight.doc', 'Solution.fig', 'Re
 
   /* Folders */
   .folders { list-style: none; margin: 0; padding: 0; }
-  .folders li { position: absolute; left: var(--x); top: 2.3%; transform: translateX(-50%); z-index: 4; }
+  .folders li { position: absolute; left: calc(var(--x) * var(--u)); top: calc(22 * var(--u)); transform: translateX(-50%); z-index: 4; }
   .dir { display: grid; justify-items: center; gap: calc(12 * var(--u)); padding: 0; border: 0; background: none; color: #eee; font: inherit; }
   .icon { position: relative; width: calc(112 * var(--u)); aspect-ratio: 110 / 88; margin-top: calc(70 * var(--u)); }
   .icon svg { position: absolute; inset: 0; width: 100%; height: 100%; }
@@ -163,19 +165,19 @@ const files = ['Problem.txt', 'Research.pdf', 'Insight.doc', 'Solution.fig', 'Re
   /* Corner copy, guides and plus marks */
   .corner { position: absolute; margin: 0; font-size: calc(14.5 * var(--u)); line-height: 1.45; letter-spacing: 0.06em; text-transform: uppercase; color: #cfcfd4; }
   .corner::after { content: ""; display: block; width: calc(24 * var(--u)); margin-top: calc(14 * var(--u)); border-top: 1px solid #777; }
-  .tr { left: 88.58%; top: 7.3%; }
-  .bl { left: 5.68%; top: 75.2%; }
+  .tr { left: calc(100% - 191 * var(--u)); top: calc(69 * var(--u)); }
+  .bl { left: calc(95 * var(--u)); top: calc(100% - 233 * var(--u)); }
   .guide { position: absolute; border: 0 dashed rgba(255, 255, 255, 0.28); }
-  .g1 { left: 98.1%; top: 0; height: 20.2%; border-left-width: 1px; }
-  .g2 { left: 81%; right: 0; top: 21.8%; border-top-width: 1px; }
-  .g3 { left: 3.1%; top: 73%; height: 17.5%; border-left-width: 1px; }
-  .g4 { left: 3.1%; width: 14%; top: 71.4%; border-top-width: 1px; }
+  .g1 { left: calc(100% - 32 * var(--u)); top: 0; height: calc(190 * var(--u)); border-left-width: 1px; }
+  .g2 { left: calc(100% - 318 * var(--u)); right: 0; top: calc(205 * var(--u)); border-top-width: 1px; }
+  .g3 { left: calc(52 * var(--u)); top: calc(100% - 254 * var(--u)); height: calc(165 * var(--u)); border-left-width: 1px; }
+  .g4 { left: calc(52 * var(--u)); width: calc(234 * var(--u)); top: calc(100% - 269 * var(--u)); border-top-width: 1px; }
   .plus { position: absolute; transform: translate(-50%, -50%); font-family: var(--font-inter); font-weight: 300; font-size: calc(26 * var(--u)); line-height: 1; color: #ddd; }
-  .p-tr { left: 98.1%; top: 20.2%; }
-  .p-bl { left: 3.1%; top: 71.7%; }
+  .p-tr { left: calc(100% - 32 * var(--u)); top: calc(190 * var(--u)); }
+  .p-bl { left: calc(52 * var(--u)); top: calc(100% - 266 * var(--u)); }
 
   /* Win95-style window chrome, shared by PROJECT.EXE and the explorer pop-ups */
-  .exe { position: absolute; left: 39.2%; top: 29%; width: 27.35%; height: 36.8%; border: calc(3 * var(--u)) solid #c9c9cc; box-shadow: inset 0 0 0 1px #6c6c70; }
+  .exe { position: absolute; left: calc(50% - 181 * var(--a)); top: calc(50% - 197.5 * var(--a)); width: calc(457 * var(--a)); height: calc(346 * var(--a)); border: calc(3 * var(--u)) solid #c9c9cc; box-shadow: inset 0 0 0 1px #6c6c70; }
   .bar { display: flex; align-items: center; gap: calc(3 * var(--u)); height: calc(34 * var(--u)); padding: 0 calc(5 * var(--u)) 0 calc(14 * var(--u)); background: #000; border-bottom: calc(3 * var(--u)) solid #c9c9cc; font-size: calc(15 * var(--u)); letter-spacing: 0.03em; }
   .bar span { flex: 1; }
   .bar i, .bar .x {
@@ -192,6 +194,9 @@ const files = ['Problem.txt', 'Research.pdf', 'Insight.doc', 'Solution.fig', 'Re
   .bar .x::before, .bar .x::after { content: ""; position: absolute; left: 18%; right: 18%; top: 50%; border-top: 2px solid #000; transform: rotate(45deg); }
   .bar .x::after { transform: rotate(-45deg); }
 
+  .hint span { transition: opacity 0.2s; }
+  .stage.in-win .hint span { opacity: 0; }
+  .hint-home { position: absolute; left: calc(713 * var(--u)); top: calc(100% - 251 * var(--u)); }
   .hint { position: absolute; z-index: 20; left: 0; top: 0; display: flex; align-items: flex-start; gap: calc(22 * var(--u)); pointer-events: none; will-change: transform; }
   .hint svg { width: calc(30 * var(--u)); fill: #000; stroke: #fff; stroke-width: 1.6; stroke-linejoin: round; }
   .hint span { margin-top: calc(28 * var(--u)); font-size: calc(15 * var(--u)); white-space: nowrap; color: #eee; }
@@ -201,8 +206,8 @@ const files = ['Problem.txt', 'Research.pdf', 'Insight.doc', 'Solution.fig', 'Re
     position: absolute;
     left: 0;
     right: 0;
-    top: 90.9%;
-    height: 6.4%;
+    bottom: calc(26 * var(--u));
+    height: calc(60 * var(--u));
     display: flex;
     align-items: center;
     gap: calc(26 * var(--u));
@@ -239,7 +244,7 @@ const files = ['Problem.txt', 'Research.pdf', 'Insight.doc', 'Solution.fig', 'Re
   .clock b { font-weight: 400; }
 
   /* Project window: opens inside the desktop, folders move to a column on the left */
-  .stage.opened .folders li { left: 5.3%; top: calc(var(--i) * 11.8% + 3.5%); }
+  .stage.opened .folders li { left: calc(88 * var(--u)); top: calc((22 + var(--i) * 112) * var(--u)); }
   .stage.opened .icon { width: calc(84 * var(--u)); margin-top: 0; }
   .icon { transition: filter 0.35s, width 0.5s var(--ease-reveal), margin-top 0.5s var(--ease-reveal); }
   .folders li { transition: left 0.5s var(--ease-reveal), top 0.5s var(--ease-reveal); }
@@ -249,10 +254,10 @@ const files = ['Problem.txt', 'Research.pdf', 'Insight.doc', 'Solution.fig', 'Re
 
   .pw {
     position: absolute;
-    left: 16%;
-    top: 3.7%;
-    width: 76.3%;
-    height: 87.2%;
+    left: calc(200 * var(--u));
+    right: calc(60 * var(--u));
+    top: calc(28 * var(--u));
+    bottom: calc(100 * var(--u));
     z-index: 3;
     display: flex;
     flex-direction: column;
@@ -268,8 +273,8 @@ const files = ['Problem.txt', 'Research.pdf', 'Insight.doc', 'Solution.fig', 'Re
   .pw[hidden] { display: none; }
   @keyframes pw-in { from { opacity: 0; transform: scale(0.96); } }
   /* Expand = maximise to the whole desktop above the taskbar */
-  .pw { transition: left 0.4s var(--ease-reveal), top 0.4s var(--ease-reveal), width 0.4s var(--ease-reveal), height 0.4s var(--ease-reveal); }
-  .pw.max { left: 0; top: 0; width: 100%; height: 90.9%; z-index: 6; border-radius: 0; }
+  .pw { transition: left 0.4s var(--ease-reveal), right 0.4s var(--ease-reveal), top 0.4s var(--ease-reveal), bottom 0.4s var(--ease-reveal); }
+  .pw.max { left: 0; right: 0; top: 0; bottom: calc(88 * var(--u)); z-index: 6; border-radius: 0; }
 
   .pw-bar { display: flex; align-items: center; gap: calc(14 * var(--u)); height: calc(36 * var(--u)); padding: 0 calc(8 * var(--u)) 0 calc(24 * var(--u)); border-bottom: 1px solid rgba(210, 210, 230, 0.35); font-family: var(--font-inter); font-size: calc(16 * var(--u)); }
   .pw-bar > svg { width: calc(20 * var(--u)); fill: #eee; }
@@ -306,18 +311,16 @@ const files = ['Problem.txt', 'Research.pdf', 'Insight.doc', 'Solution.fig', 'Re
   .open { display: inline-block; margin-top: calc(30 * var(--u)); padding: calc(8 * var(--u)) calc(16 * var(--u)); border: 1px solid #7c5cff; font-size: calc(15 * var(--u)); transition: background 0.2s; }
   .open:hover { background: #7c5cff; }
 
+  /* Tablets in portrait and phones: taller desktop, folders in a row, windows full width */
   @media (max-width: 800px) {
-    /* Phones: taller stage, hands cropped to the centre, folders in a row */
-    .stage { --u: 0.24cqw; aspect-ratio: 9 / 14; background-size: auto 100%; }
-    .folders li { top: 2%; }
-    .folders li:nth-child(1) { --x: 18% !important; }
-    .folders li:nth-child(2) { --x: 50% !important; }
-    .folders li:nth-child(3) { --x: 82% !important; }
-    .corner, .guide, .plus, .hint, .tray, .tb, .taskbar .sep, .clock { display: none; }
-    .exe { left: 12%; width: 76%; top: 34%; height: 32%; }
-    .search { left: auto; right: 4%; width: 50%; }
-    .pw { left: 2%; top: 2%; width: 96%; height: 87%; }
+    .stage { --u: clamp(0.8px, 100cqw / 420, 1.1px); height: min(100svh, 180vw); }
+    .folders li:nth-child(1) { left: 18%; }
+    .folders li:nth-child(2) { left: 50%; }
+    .folders li:nth-child(3) { left: 82%; }
     .stage.opened .folders { visibility: hidden; }
+    .corner, .guide, .plus, .hint, .tray, .tb, .taskbar .sep, .clock { display: none; }
+    .search { left: auto; right: 4%; width: 52%; }
+    .pw, .pw.max { left: 2%; right: 2%; top: calc(14 * var(--u)); bottom: calc(96 * var(--u)); }
     .pw-top, .pw-grid { grid-template-columns: 1fr; gap: 1rem; }
     .gallery { grid-template-columns: 1fr 1fr; }
     .pw-bar em { display: none; }
@@ -328,8 +331,9 @@ const files = ['Problem.txt', 'Research.pdf', 'Insight.doc', 'Solution.fig', 'Re
   const stage = document.querySelector<HTMLElement>('.work .stage')!;
   const hint = stage.querySelector<HTMLElement>('.hint')!;
 
-  // Hint rests where the reference puts it (42.6%, 73.3%) and trails the pointer inside the stage
-  const rest = () => ({ x: stage.clientWidth * 0.4265, y: stage.clientHeight * 0.733 });
+  // Hint rests at .hint-home and trails the pointer inside the stage
+  const home = stage.querySelector<HTMLElement>('.hint-home')!;
+  const rest = () => ({ x: home.offsetLeft, y: home.offsetTop });
   let pos = rest(), target = rest(), raf = 0;
   const tick = () => {
     pos.x += (target.x - pos.x) * 0.25;
@@ -341,6 +345,7 @@ const files = ['Problem.txt', 'Research.pdf', 'Insight.doc', 'Solution.fig', 'Re
   stage.addEventListener('pointermove', (e) => {
     const r = stage.getBoundingClientRect();
     target = { x: e.clientX - r.left - 2, y: e.clientY - r.top - 2 };
+    stage.classList.toggle('in-win', !!(e.target as HTMLElement).closest('.pw'));
     go();
   });
   stage.addEventListener('pointerleave', () => { target = rest(); go(); });
@@ -382,4 +387,22 @@ const files = ['Problem.txt', 'Research.pdf', 'Insight.doc', 'Solution.fig', 'Re
     w.querySelector('[data-expand]')!.addEventListener('click', () => w.classList.toggle('max'));
   });
   document.addEventListener('keydown', (e) => e.key === 'Escape' && close());
+
+  // Snap: once the desktop fills 40% of the screen on the way down, settle it into full view.
+  // Scrolling inside a project window never reaches the page (overscroll-behavior: contain).
+  let lastY = scrollY, down = false, idle = 0, snapped = false;
+  const check = () => {
+    const top = stage.getBoundingClientRect().top;
+    if (top > innerHeight * 0.6 || top < -stage.offsetHeight) snapped = false; // left the zone: re-arm
+    if (down && !snapped && top > 2 && top <= innerHeight * 0.6) {
+      snapped = true;
+      scrollTo({ top: scrollY + top, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    }
+  };
+  addEventListener('scroll', () => {
+    down = scrollY > lastY;
+    lastY = scrollY;
+    clearTimeout(idle);
+    idle = window.setTimeout(check, 90);
+  }, { passive: true });
 </script>
