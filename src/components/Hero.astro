@@ -1,0 +1,269 @@
+---
+import Folder from './Folder.astro';
+import { email, phone, linkedin } from '../data/projects.js';
+
+const details = [
+  ['Role', 'Product Manager'],
+  ['Location', 'Hyderabad, India'],
+];
+const contacts = [
+  { icon: 'phone', text: phone, href: `tel:${phone.replace(/\s/g, '')}` },
+  { icon: 'mail', text: email, href: `mailto:${email}` },
+  { icon: 'in', text: linkedin.replace('https://', ''), href: linkedin },
+];
+// Tools from the resume. Glyphs are simple marks, not official logos.
+const tools = ['figma', 'sql', 'tableau', 'excel', 'pendo'];
+---
+<section class="hero" aria-label="Introduction">
+  <div class="grid container">
+    <aside class="profile">
+      <div class="photo" role="img" aria-label="Photo of Radhika Goel (placeholder)"><span>Photo</span></div>
+
+      <ul class="chips">
+        <li>+ Product Strategy</li>
+        <li>AI Products</li>
+      </ul>
+
+      <dl class="details">
+        {details.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
+        <div><dt>Status</dt><dd class="status"><i></i>Open to PM roles</dd></div>
+      </dl>
+
+      <p class="label">Contact</p>
+      <ul class="contacts">
+        {contacts.map((c) => (
+          <li>
+            <span class="ico" aria-hidden="true">
+              {c.icon === 'in' ? <b>in</b> : c.icon === 'phone' ? (
+                <svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2" /></svg>
+              ) : (
+                <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>
+              )}
+            </span>
+            <a href={c.href} target={c.icon === 'in' ? '_blank' : undefined} rel="noopener">{c.text}</a>
+            <button class="copy" data-copy={c.text} aria-label={`Copy ${c.text}`}>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2" /><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" /></svg>
+            </button>
+          </li>
+        ))}
+      </ul>
+
+      <ul class="tools" aria-label="Tools">
+        {tools.map((t) => (
+          <li class={`tool ${t}`} title={t === 'sql' ? 'SQL' : t[0].toUpperCase() + t.slice(1)}>
+            {t === 'figma' && (
+              <svg viewBox="0 0 38 57"><path fill="#1abcfe" d="M19 28.5a9.5 9.5 0 1 1 19 0 9.5 9.5 0 0 1-19 0z"/><path fill="#0acf83" d="M0 47.5A9.5 9.5 0 0 1 9.5 38H19v9.5a9.5 9.5 0 1 1-19 0z"/><path fill="#ff7262" d="M19 0v19h9.5a9.5 9.5 0 1 0 0-19H19z"/><path fill="#f24e1e" d="M0 9.5A9.5 9.5 0 0 0 9.5 19H19V0H9.5A9.5 9.5 0 0 0 0 9.5z"/><path fill="#a259ff" d="M0 28.5A9.5 9.5 0 0 0 9.5 38H19V19H9.5A9.5 9.5 0 0 0 0 28.5z"/></svg>
+            )}
+            {t === 'sql' && <span>SQL</span>}
+            {t === 'tableau' && (
+              <svg viewBox="0 0 24 24" stroke-linecap="round"><path stroke="#e97627" stroke-width="2.4" d="M12 5v14M5 12h14"/><path stroke="#5b879b" stroke-width="1.6" d="M5 4v5M2.5 6.5h5M19 15v5M16.5 17.5h5M19 4v5M16.5 6.5h5M5 15v5M2.5 17.5h5"/></svg>
+            )}
+            {t === 'excel' && <span>X</span>}
+            {t === 'pendo' && <span>P</span>}
+          </li>
+        ))}
+      </ul>
+    </aside>
+
+    <div class="stage">
+      <article class="intro">
+        <p class="num">01/</p>
+        <h1>Hi, I'm <em>Radhika Goel</em></h1>
+        <p class="body">Placeholder introduction. A line on my background, the problems I like to solve and the kind of product work I want to do next.</p>
+        <p class="chev" aria-hidden="true"><span>›</span><span>›</span><span>›</span></p>
+        <svg class="orbit" viewBox="0 0 200 120" aria-hidden="true">
+          <g transform="rotate(-32 100 60)">
+            <path id="orbit-path" d="M8 60a92 40 0 1 0 184 0a92 40 0 1 0-184 0" />
+            <circle r="5"><animateMotion dur="9s" repeatCount="indefinite"><mpath href="#orbit-path" /></animateMotion></circle>
+          </g>
+        </svg>
+        <span class="plus" aria-hidden="true">+</span>
+      </article>
+      <Folder />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    padding-block: calc(var(--nav-h) + 1rem) 4rem;
+    background: radial-gradient(60rem 30rem at 60% 12%, rgba(40, 80, 255, 0.14), transparent 70%), #000;
+    overflow: clip;
+  }
+  .grid { max-width: 90rem; display: grid; grid-template-columns: 21rem 1fr; gap: 3.5rem; align-items: start; }
+
+  /* Left profile column */
+  .profile { font-family: var(--font-mono); font-size: 0.83rem; color: #e6e6e6; }
+  .photo {
+    aspect-ratio: 376 / 300;
+    border-radius: 24px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(160deg, #3a3a3a, #1b1b1b);
+    color: #777;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .chips { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.1rem 0 1rem; padding: 0; }
+  .chips li { padding: 0.35rem 0.8rem; border-radius: 999px; background: #141414; border: 1px solid #222; }
+  .details { margin: 0; }
+  .details div { display: flex; align-items: baseline; gap: 0.6rem; padding-block: 0.4rem; }
+  .details dt { color: #9a9a9a; }
+  .details dt::after { content: ""; }
+  .details div::before { content: ""; order: 1; flex: 1; border-bottom: 1px dotted #333; }
+  .details dd { order: 2; margin: 0; }
+  .status { color: #4ade80; }
+  .status i { display: inline-block; width: 6px; height: 6px; margin-right: 0.45rem; border-radius: 50%; background: currentColor; vertical-align: middle; animation: blink 2s ease-in-out infinite; }
+  @keyframes blink { 50% { opacity: 0.3; } }
+
+  .label { margin: 1rem 0 0; padding: 0.8rem 0 0.5rem; border-top: 1px solid #222; border-bottom: 1px solid #222; font-size: 0.94rem; }
+  .contacts { list-style: none; margin: 0.3rem 0 1rem; padding: 0; }
+  .contacts li { display: flex; align-items: center; gap: 0.9rem; padding-block: 0.3rem; }
+  .ico { width: 30px; height: 30px; flex: none; display: grid; place-items: center; border-radius: 8px; background: #141414; border: 1px solid #222; }
+  .ico b { font-family: var(--font-sans); font-size: 0.85rem; }
+  .ico svg, .copy svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linejoin: round; }
+  .contacts a { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .contacts a:hover { color: #fff; text-decoration: underline; }
+  .copy { flex: none; padding: 4px; border: 0; background: none; color: #8a8a8a; cursor: pointer; transition: color 0.2s; }
+  .copy:hover { color: #fff; }
+  .copy.done { color: #4ade80; }
+
+  /* Tool tray: glass tiles that lift and tilt towards the pointer */
+  .tools {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0.9rem;
+    border-radius: 16px;
+    background: #0b0b0b;
+    border: 1px solid #1d1d1d;
+    perspective: 500px;
+  }
+  .tool {
+    --rx: 0deg;
+    --ry: 0deg;
+    position: relative;
+    width: 3.1rem;
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: linear-gradient(145deg, #262626, #121212);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 4px 10px rgba(0, 0, 0, 0.5);
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 1.05rem;
+    transform: rotateX(var(--rx)) rotateY(var(--ry));
+    transition: transform 0.35s var(--ease-reveal), box-shadow 0.35s, border-color 0.35s;
+    cursor: default;
+  }
+  .tool::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at var(--gx, 50%) var(--gy, 0%), rgba(255, 255, 255, 0.35), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .tool:hover {
+    transform: translateY(-5px) scale(1.08) rotateX(var(--rx)) rotateY(var(--ry));
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 12px 24px rgba(0, 0, 0, 0.6), 0 0 18px var(--glow, rgba(255, 255, 255, 0.15));
+  }
+  .tool:hover::after { opacity: 1; }
+  .tool svg { width: 52%; height: 52%; fill: none; }
+  .figma { --glow: rgba(162, 89, 255, 0.35); }
+  .sql { --glow: rgba(56, 132, 255, 0.4); color: #5ea0ff; font-size: 0.8rem; letter-spacing: 0.02em; }
+  .tableau { --glow: rgba(233, 118, 39, 0.35); }
+  .excel { --glow: rgba(33, 163, 102, 0.4); color: #33c481; font-size: 1.3rem; }
+  .pendo { --glow: rgba(236, 72, 153, 0.4); color: #f472b6; font-size: 1.3rem; }
+
+  /* Right stage */
+  .stage { position: relative; margin-top: -3.5rem; }
+  .intro {
+    position: relative;
+    z-index: 2;
+    width: 92%;
+    margin-left: 4%;
+    padding: 1.8rem 2.4rem 1.6rem;
+    border-radius: 22px;
+    transform: rotate(5deg);
+    color: #fff;
+    background:
+      linear-gradient(rgba(120, 150, 255, 0.07) 1px, transparent 1px) 0 0 / 28px 28px,
+      linear-gradient(90deg, rgba(120, 150, 255, 0.07) 1px, transparent 1px) 0 0 / 28px 28px,
+      linear-gradient(135deg, rgba(30, 50, 110, 0.55), rgba(8, 12, 30, 0.55) 55%, rgba(20, 30, 70, 0.5));
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    backdrop-filter: blur(18px) saturate(150%);
+    border: 1px solid rgba(140, 170, 255, 0.3);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.25),
+      inset 0 0 40px rgba(60, 100, 255, 0.12),
+      -18px 0 50px -10px rgba(40, 90, 255, 0.45),
+      0 30px 80px rgba(0, 0, 0, 0.6);
+  }
+  /* Blue light bleeding in from the left edge */
+  .intro::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(18rem 10rem at 0% 40%, rgba(60, 110, 255, 0.35), transparent 70%);
+    pointer-events: none;
+  }
+  .num { margin: 0 0 0.6rem; color: #6d8cff; font-family: var(--font-mono); font-size: 0.85rem; text-decoration: underline; text-underline-offset: 4px; }
+  h1 { position: relative; margin: 0; font-family: var(--font-inter); font-weight: 500; font-size: clamp(1.9rem, 3vw, 2.7rem); line-height: 1.15; letter-spacing: -0.01em; }
+  h1 em { font-style: normal; color: #5b86ff; }
+  .body { position: relative; max-width: 30rem; margin: 1rem 0 0; color: #c9cedb; font-family: var(--font-inter); font-size: 1rem; }
+  .chev { display: flex; gap: 0.35rem; margin: 1rem 0 0; font-size: 1.4rem; line-height: 1; color: #c9cedb; }
+  .chev span { animation: chev 1.6s ease-in-out infinite; }
+  .chev span:nth-child(2) { animation-delay: 0.15s; }
+  .chev span:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes chev { 0%, 100% { opacity: 0.35; transform: none; } 40% { opacity: 1; transform: translateX(3px); } }
+  .orbit { position: absolute; right: 6%; top: 50%; width: 30%; max-width: 13rem; transform: translateY(-50%); overflow: visible; }
+  .orbit path { fill: none; stroke: #3b6bff; stroke-width: 1.2; }
+  .orbit circle { fill: #3b82ff; filter: drop-shadow(0 0 6px #3b82ff); }
+  .plus { position: absolute; right: 4%; top: 52%; color: #5b86ff; font-size: 1.8rem; font-weight: 300; line-height: 1; }
+
+  @media (max-width: 1100px) {
+    .grid { grid-template-columns: 1fr; }
+    .profile { max-width: 26rem; }
+    .stage { order: -1; margin-top: 0; }
+  }
+  @media (max-width: 767.98px) {
+    .intro { width: 100%; margin-left: 0; padding: 1.6rem; transform: rotate(3deg); }
+    .orbit, .plus { opacity: 0.5; }
+  }
+</style>
+
+<script>
+  // Copy buttons
+  document.querySelectorAll<HTMLButtonElement>('.hero .copy').forEach((b) =>
+    b.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(b.dataset.copy || ''); } catch {}
+      b.classList.add('done');
+      setTimeout(() => b.classList.remove('done'), 1200);
+    }),
+  );
+
+  // Tool tiles tilt and catch light where the pointer is
+  document.querySelectorAll<HTMLElement>('.hero .tool').forEach((t) => {
+    t.addEventListener('pointermove', (e) => {
+      const r = t.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width;
+      const y = (e.clientY - r.top) / r.height;
+      t.style.setProperty('--ry', `${(x - 0.5) * 24}deg`);
+      t.style.setProperty('--rx', `${(0.5 - y) * 24}deg`);
+      t.style.setProperty('--gx', `${x * 100}%`);
+      t.style.setProperty('--gy', `${y * 100}%`);
+    });
+    t.addEventListener('pointerleave', () => { t.style.setProperty('--rx', '0deg'); t.style.setProperty('--ry', '0deg'); });
+  });
+</script>

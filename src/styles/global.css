@@ -5,6 +5,7 @@
   --c-muted: #999;
   --font-sans: "Poppins", -apple-system, "Segoe UI", Arial, sans-serif;
   --font-inter: "Inter", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
   --container-max: 83.33333rem;
   --container-pad: 1.66667rem;
   --nav-h: 7.77778rem;

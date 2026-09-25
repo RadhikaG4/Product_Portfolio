@@ -1,0 +1,315 @@
+---
+// Resume folder that hangs on a cord from a hook off-screen. Drag it; it swings back.
+const education = [
+  ['Indian School of Business', 'PGP YL, IT and Operations', "Jun '25 to Feb '27"],
+  ['Thapar Institute of Engineering', 'B.E. Computer Engineering', "Oct '21 to May '25"],
+];
+const doing = ['Product strategy and execution', 'User research and discovery', 'AI and data products', 'Prototyping and user testing'];
+const skills = ['SQL', 'Tableau', 'Figma', 'Excel', 'User Research', 'Scrum', 'Pendo'];
+const experience = [
+  ['Digital Strategy Intern', 'Tata Consumer Products', "Apr to May '26", 'AI-led outlet expansion, ~600 stores onboarded in 2 months'],
+  ['Software Development Intern', 'JP Morgan Chase', "Jan to Jun '25", 'Anomaly detection for $5bn+ portfolios'],
+  ['Summer Intern, PPO', 'JP Morgan Chase', "Jun to Aug '24", 'Real-time data pipelines across 10 sources'],
+];
+const projects = [['MakeMyTrip', 'Top-of-funnel features'], ['Paytm', 'UPI adoption and churn']];
+const paper = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .28 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E";
+---
+<div class="hang" style={`--paper: url("${paper}")`}>
+  <svg class="rope" aria-hidden="true">
+    <defs>
+      <linearGradient id="cord" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#dbe6f5" />
+        <stop offset="1" stop-color="#7f93ad" />
+      </linearGradient>
+    </defs>
+    <path class="cord-shadow" />
+    <path class="cord" />
+    <path class="cord-twist" />
+  </svg>
+
+  <div class="folder" role="region" aria-label="Resume summary, draggable">
+    <span class="tab t1"></span>
+    <span class="tab t2"></span>
+    <div class="sheet">
+      <div class="col">
+        <section>
+          <header><span class="n">02/</span><h2>Education</h2>
+            <svg viewBox="0 0 24 24"><path d="M2 9l10-5 10 5-10 5z" /><path d="M6 11v5c3 2 9 2 12 0v-5" /></svg></header>
+          {education.map(([school, degree, when]) => (
+            <div class="row"><div><strong>{school}</strong><span>{degree}</span></div><em>{when}</em></div>
+          ))}
+        </section>
+        <section>
+          <header><span class="n">03/</span><h2>What I Do</h2>
+            <svg viewBox="0 0 24 24"><path d="M5 3l14 7-6 2-2 6z" /></svg></header>
+          <ul class="dots">{doing.map((d) => <li>{d}</li>)}</ul>
+        </section>
+        <section>
+          <header><span class="n">04/</span><h2>Skills</h2>
+            <svg viewBox="0 0 24 24"><path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9" stroke-width="2.6" /></svg></header>
+          <ul class="pills">{skills.map((s) => <li>{s}</li>)}</ul>
+        </section>
+      </div>
+      <div class="col">
+        <section>
+          <header><span class="n">05/</span><h2>Experience</h2>
+            <svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2" /><path d="M9 7V5h6v2M3 12h18" /></svg></header>
+          <ul class="jobs">
+            {experience.map(([role, co, when, note]) => (
+              <li><strong>{role} / {co}</strong><span>{when}</span><p>{note}</p></li>
+            ))}
+          </ul>
+        </section>
+        <section>
+          <header><span class="n">06/</span><h2>Projects</h2>
+            <svg viewBox="0 0 24 24"><path d="M3 6h6l2 2h10v11H3z" /></svg></header>
+          <ul class="thumbs">
+            {projects.map(([name, note]) => (
+              <li><div class="img"><svg viewBox="0 0 24 24"><path d="M3 18l6-7 4 5 3-3 5 5z" /><circle cx="15" cy="7" r="2" /></svg></div><strong>{name}</strong><span>{note}</span></li>
+            ))}
+          </ul>
+        </section>
+      </div>
+      <span class="grommet" aria-hidden="true"></span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .hang { position: relative; margin-top: 1.4rem; z-index: 3; }
+  .rope { position: absolute; left: 0; top: 0; width: 1px; height: 1px; overflow: visible; pointer-events: none; z-index: 3; }
+  .rope path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .cord-shadow { stroke: rgba(0, 0, 0, 0.45); stroke-width: 9; filter: blur(3px); transform: translate(3px, 6px); }
+  .cord { stroke: url(#cord); stroke-width: 6; }
+  .cord-twist { stroke: rgba(255, 255, 255, 0.7); stroke-width: 1.6; stroke-dasharray: 3 7; }
+
+  .folder {
+    --hx: calc(100% - 170px);
+    --hy: 90px;
+    position: relative;
+    padding-top: 28px;
+    transform-origin: var(--hx) var(--hy);
+    cursor: grab;
+    user-select: none;
+    touch-action: pan-y;
+    will-change: transform;
+    filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.55));
+  }
+  .folder.dragging { cursor: grabbing; }
+
+  /* Tabs belong to the back sheet peeking above the front one */
+  .tab {
+    position: absolute;
+    top: 0;
+    height: 44px;
+    background: #c8c8c6 var(--paper);
+    border-radius: 16px 16px 0 0;
+  }
+  .t1 { left: 7%; width: 150px; }
+  .t2 { right: 3%; width: 32%; }
+  .tab::before, .tab::after { content: ""; position: absolute; bottom: 16px; width: 24px; height: 24px; background: inherit; }
+  .t1::after { right: -12px; transform: skewX(35deg); }
+  .t2::before { left: -12px; transform: skewX(-35deg); }
+
+  .sheet {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 2.6rem;
+    padding: 1.9rem 2.4rem 2rem;
+    border-radius: 22px;
+    background: #d9d9d7 var(--paper);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -2px 6px rgba(0, 0, 0, 0.12);
+    color: #161616;
+    font-family: var(--font-inter);
+  }
+  .sheet::after { content: ""; position: absolute; top: 1.9rem; bottom: 2rem; left: 50%; border-left: 1px solid rgba(0, 0, 0, 0.3); }
+  .col { display: flex; flex-direction: column; gap: 1.3rem; min-width: 0; }
+
+  header { display: grid; grid-template-columns: 1fr auto; align-items: end; padding-bottom: 0.45rem; margin-bottom: 0.7rem; border-bottom: 1px solid rgba(0, 0, 0, 0.45); }
+  .n { grid-column: 1 / -1; color: #2f62ff; font-size: 0.78rem; }
+  h2 { margin: 0; font-weight: 500; font-size: 1.2rem; line-height: 1.2; }
+  header svg { width: 26px; height: 26px; fill: none; stroke: #161616; stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
+
+  .row { display: flex; justify-content: space-between; gap: 1rem; font-size: 0.8rem; line-height: 1.35; }
+  .row + .row { margin-top: 0.7rem; }
+  .row div { display: grid; }
+  .row strong { font-weight: 600; }
+  .row span, .row em, .jobs span, .thumbs span { color: #555; font-style: normal; }
+  .row em { white-space: nowrap; }
+
+  ul { list-style: none; margin: 0; padding: 0; }
+  .dots li { position: relative; padding-left: 1.3rem; font-size: 0.8rem; line-height: 1.75; }
+  .dots li::before, .jobs li::before { content: ""; position: absolute; left: 0; top: 0.6em; width: 9px; height: 9px; border-radius: 50%; background: #161616; }
+  .pills { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+  .pills li { padding: 0.3rem 0.8rem; border-radius: 999px; background: rgba(0, 0, 0, 0.09); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12); font-size: 0.76rem; }
+
+  .jobs { display: grid; gap: 0.75rem; }
+  .jobs li { position: relative; display: grid; padding-left: 1.5rem; font-size: 0.8rem; line-height: 1.4; }
+  .jobs li::before { top: 0.45em; }
+  .jobs strong { font-weight: 600; }
+  .jobs p { margin: 0.15rem 0 0; color: #333; }
+
+  .thumbs { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+  .thumbs li { display: grid; gap: 0.2rem; padding: 0.45rem 0.45rem 0.7rem; border: 1px solid rgba(0, 0, 0, 0.25); border-radius: 6px; font-size: 0.76rem; }
+  .thumbs .img { aspect-ratio: 16 / 6; display: grid; place-items: center; margin-bottom: 0.35rem; border-radius: 4px; background: rgba(0, 0, 0, 0.14); }
+  .thumbs svg { width: 26px; fill: rgba(0, 0, 0, 0.45); }
+  .thumbs strong { font-weight: 600; }
+
+  /* Eyelet the cord ties into */
+  .grommet {
+    position: absolute;
+    left: var(--hx);
+    top: calc(var(--hy) - 28px);
+    width: 22px;
+    height: 22px;
+    margin: -11px 0 0 -11px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #050505 45%, #8d99a8 50%, #e8eef5 62%, #6c7684 75%, transparent 78%);
+  }
+
+  @media (max-width: 767.98px) {
+    .folder { --hx: calc(100% - 60px); --hy: 50px; }
+    .sheet { grid-template-columns: 1fr; padding: 1.8rem 1.4rem; }
+    .sheet::after { display: none; }
+    .t2 { width: 45%; }
+  }
+</style>
+
+<script>
+  const hang = document.querySelector<HTMLElement>('.hang')!;
+  const folder = hang.querySelector<HTMLElement>('.folder')!;
+  const [shadow, cord, twist] = hang.querySelectorAll<SVGPathElement>('.rope path');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Folder body: offset from rest (x, y), rotation (a) around the eyelet, plus velocities.
+  const f = { x: 0, y: 0, a: 0, vx: 0, vy: 0, va: 0 };
+  const MAX = 180; // how far it can be pulled before the cord feels taut
+  let hole = { x: 0, y: 0 }; // eyelet at rest, in .hang coordinates
+  let anchor = { x: 0, y: 0 }; // hook, off to the top right
+  let ropeLen = 0;
+
+  // Cord as a verlet chain between hook and eyelet.
+  const N = 18;
+  let pts: { x: number; y: number; px: number; py: number }[] = [];
+
+  const measure = () => {
+    const r = hang.getBoundingClientRect();
+    const cs = getComputedStyle(folder);
+    const [ox, oy] = cs.transformOrigin.split(' ').map(parseFloat);
+    hole = { x: ox, y: oy };
+    anchor = { x: Math.max(hole.x + 140, innerWidth - r.left + 30), y: hole.y - 260 };
+    ropeLen = Math.hypot(anchor.x - hole.x, anchor.y - hole.y) * 1.06;
+    pts = Array.from({ length: N }, (_, i) => {
+      const t = i / (N - 1);
+      const x = anchor.x + (hole.x - anchor.x) * t;
+      const y = anchor.y + (hole.y - anchor.y) * t;
+      return { x, y, px: x, py: y };
+    });
+  };
+
+  let drag: { id: number; sx: number; sy: number; fx: number; fy: number; lx: number; ly: number; t: number } | null = null;
+
+  folder.addEventListener('pointerdown', (e) => {
+    if (e.button !== 0) return;
+    drag = { id: e.pointerId, sx: e.clientX, sy: e.clientY, fx: f.x, fy: f.y, lx: e.clientX, ly: e.clientY, t: performance.now() };
+    folder.setPointerCapture(e.pointerId);
+    folder.classList.add('dragging');
+    wake();
+  });
+  folder.addEventListener('pointermove', (e) => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const now = performance.now();
+    const dt = Math.max(16, now - drag.t);
+    // Pointer velocity feeds the swing
+    f.vx = ((e.clientX - drag.lx) / dt) * 16;
+    f.vy = ((e.clientY - drag.ly) / dt) * 16;
+    drag.lx = e.clientX; drag.ly = e.clientY; drag.t = now;
+  });
+  const release = (e: PointerEvent) => {
+    if (!drag || e.pointerId !== drag.id) return;
+    folder.classList.remove('dragging');
+    drag = null;
+  };
+  folder.addEventListener('pointerup', release);
+  folder.addEventListener('pointercancel', release);
+
+  // Rubber-band: pulls ease off the further you go, capped near MAX.
+  const band = (d: number) => (MAX * d) / (MAX + Math.abs(d));
+
+  const step = () => {
+    if (drag) {
+      const tx = drag.fx + band(drag.lx - drag.sx);
+      const ty = drag.fy + band(drag.ly - drag.sy);
+      f.x += (tx - f.x) * 0.35;
+      f.y += (ty - f.y) * 0.35;
+    } else {
+      // Spring back to the rest pose
+      f.vx = (f.vx - f.x * 0.045) * 0.9;
+      f.vy = (f.vy - f.y * 0.045) * 0.9;
+      f.x += f.vx;
+      f.y += f.vy;
+    }
+    // Keep the eyelet within cord reach of the hook
+    const hx = hole.x + f.x, hy = hole.y + f.y;
+    const d = Math.hypot(hx - anchor.x, hy - anchor.y);
+    if (d > ropeLen) {
+      const k = ropeLen / d;
+      f.x = anchor.x + (hx - anchor.x) * k - hole.x;
+      f.y = anchor.y + (hy - anchor.y) * k - hole.y;
+    }
+    // Hanging from the eyelet: sideways motion swings it, then it settles level
+    const target = Math.max(-0.22, Math.min(0.22, -f.x * 0.0012 - f.vx * 0.012));
+    f.va = (f.va + (target - f.a) * 0.08) * 0.86;
+    f.a += f.va;
+
+    folder.style.transform = `translate3d(${f.x}px, ${f.y}px, 0) rotate(${f.a}rad)`;
+    simulateRope(hx, hy);
+
+    const moving = drag || Math.abs(f.x) + Math.abs(f.y) + Math.abs(f.vx) + Math.abs(f.vy) > 0.05 || Math.abs(f.va) + Math.abs(f.a) > 0.0005 || ropeMoving;
+    if (moving) requestAnimationFrame(step);
+    else running = false;
+  };
+
+  let ropeMoving = false;
+  const seg = () => ropeLen / (N - 1);
+  const simulateRope = (ex: number, ey: number) => {
+    let motion = 0;
+    for (const p of pts) {
+      const vx = (p.x - p.px) * 0.97, vy = (p.y - p.py) * 0.97;
+      p.px = p.x; p.py = p.y;
+      p.x += vx; p.y += vy + 0.35;
+      motion += Math.abs(vx) + Math.abs(vy);
+    }
+    const L = seg();
+    for (let k = 0; k < 14; k++) {
+      pts[0].x = anchor.x; pts[0].y = anchor.y;
+      pts[N - 1].x = ex; pts[N - 1].y = ey;
+      for (let i = 0; i < N - 1; i++) {
+        const a = pts[i], b = pts[i + 1];
+        const dx = b.x - a.x, dy = b.y - a.y;
+        const dist = Math.hypot(dx, dy) || 1;
+        const diff = ((dist - L) / dist) * 0.5;
+        if (i > 0) { a.x += dx * diff; a.y += dy * diff; }
+        if (i + 1 < N - 1) { b.x -= dx * diff; b.y -= dy * diff; }
+      }
+    }
+    ropeMoving = motion > 0.4;
+    // Smooth path through the points
+    let dStr = `M${pts[0].x},${pts[0].y}`;
+    for (let i = 1; i < N - 1; i++) {
+      const mx = (pts[i].x + pts[i + 1].x) / 2, my = (pts[i].y + pts[i + 1].y) / 2;
+      dStr += ` Q${pts[i].x},${pts[i].y} ${mx},${my}`;
+    }
+    dStr += ` L${ex},${ey}`;
+    for (const p of [shadow, cord, twist]) p.setAttribute('d', dStr);
+  };
+
+  let running = false;
+  const wake = () => { if (!running) { running = true; requestAnimationFrame(step); } };
+
+  const reset = () => { measure(); if (still) { for (let i = 0; i < 120; i++) simulateRope(hole.x, hole.y); } wake(); };
+  addEventListener('resize', reset);
+  document.fonts?.ready.then(reset);
+  reset();
+</script>
