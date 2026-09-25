@@ -1,6 +1,11 @@
 :root {
   --c-page: #141414;
-  --c-lab: #e7e8ea;
+  /* Palette: black and off-white, one violet accent */
+  --paper: #f2f1ee;
+  --acc: #8b6cff;
+  --acc-rgb: 139, 108, 255;
+  --c-lab: #e3e4e7;
+  --c-lab-top: #eeeef0;
   --c-white: #fff;
   --c-muted: #999;
   --font-sans: "Poppins", -apple-system, "Segoe UI", Arial, sans-serif;
@@ -36,7 +41,7 @@ html {
 
 body {
   margin: 0;
-  background: var(--c-page);
+  background: linear-gradient(180deg, #0b0b0c, #161618 60%, #0f0f10) fixed;
   color: var(--c-white);
   overflow-x: clip;
 }

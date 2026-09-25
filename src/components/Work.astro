@@ -107,14 +107,18 @@ const files = ['Problem.txt', 'Research.pdf', 'Insight.doc', 'Solution.fig', 'Re
 </section>
 
 <style>
-  .work { background: #000; font-family: var(--font-mono); color: #fff; }
+  .work { background: #000; overflow: hidden; font-family: var(--font-mono); color: #fff; }
   /* Every position is a % of the 1672x941 reference, so the layout scales as one picture */
   .stage {
     --u: 0.06cqw; /* one reference pixel */
     position: relative;
+    width: min(100%, calc(88svh * 1672 / 941));
+    margin-inline: auto;
     aspect-ratio: 1672 / 941;
     container-type: inline-size;
     background: var(--bg) center / 100% auto no-repeat;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
     overflow: hidden;
     cursor: none;
   }
@@ -188,7 +192,7 @@ const files = ['Problem.txt', 'Research.pdf', 'Insight.doc', 'Solution.fig', 'Re
   .bar .x::before, .bar .x::after { content: ""; position: absolute; left: 18%; right: 18%; top: 50%; border-top: 2px solid #000; transform: rotate(45deg); }
   .bar .x::after { transform: rotate(-45deg); }
 
-  .hint { position: absolute; left: 0; top: 0; display: flex; align-items: flex-start; gap: calc(22 * var(--u)); pointer-events: none; will-change: transform; }
+  .hint { position: absolute; z-index: 20; left: 0; top: 0; display: flex; align-items: flex-start; gap: calc(22 * var(--u)); pointer-events: none; will-change: transform; }
   .hint svg { width: calc(30 * var(--u)); fill: #000; stroke: #fff; stroke-width: 1.6; stroke-linejoin: round; }
   .hint span { margin-top: calc(28 * var(--u)); font-size: calc(15 * var(--u)); white-space: nowrap; color: #eee; }
 
@@ -275,9 +279,7 @@ const files = ['Problem.txt', 'Research.pdf', 'Insight.doc', 'Solution.fig', 'Re
   .pw-btn:hover { background: #7c5cff; border-color: #7c5cff; }
   .pw-btn svg { width: 70%; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
 
-  .pw-body { flex: 1; overflow-y: auto; padding: calc(30 * var(--u)) calc(54 * var(--u)) calc(40 * var(--u)); scrollbar-width: thin; scrollbar-color: #555 transparent; cursor: auto; }
-  .pw-body * { cursor: auto; }
-  .pw-body a { cursor: pointer; }
+  .pw-body { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: calc(30 * var(--u)) calc(54 * var(--u)) calc(40 * var(--u)); scrollbar-width: thin; scrollbar-color: #555 transparent; }
   .pw-top { display: grid; grid-template-columns: 1fr 1.25fr; gap: calc(80 * var(--u)); padding-bottom: calc(22 * var(--u)); border-bottom: 1px solid #2c2c36; }
   .pw-num { margin: calc(20 * var(--u)) 0 calc(8 * var(--u)); font-family: var(--font-mono); font-size: calc(15 * var(--u)); color: #aaa; }
   .pw h3 { margin: 0; font-family: var(--font-mono); font-weight: 400; font-size: calc(38 * var(--u)); line-height: 1.15; letter-spacing: 0.01em; }

@@ -49,10 +49,9 @@ const bars = [18, 26, 22, 34, 30, 44, 40, 52, 48, 62, 58, 72, 68, 84];
 
 <style>
   .bento {
-    --acc: #4f7dff;
     position: relative;
     padding-block: 0 5rem;
-    background: linear-gradient(#000 60%, var(--c-page));
+    background: linear-gradient(#0c0c0d, #131315);
     font-family: var(--font-inter);
   }
   .grid {
@@ -90,12 +89,12 @@ const bars = [18, 26, 22, 34, 30, 44, 40, 52, 48, 62, 58, 72, 68, 84];
     position: absolute;
     inset: auto 0 0;
     height: 70%;
-    background: radial-gradient(60% 90% at 50% 100%, rgba(79, 125, 255, 0.45), transparent 70%);
+    background: radial-gradient(60% 90% at 50% 100%, rgba(var(--acc-rgb), 0.35), transparent 70%);
     opacity: 0;
     transition: opacity 0.45s;
     pointer-events: none;
   }
-  .tile:hover { transform: translateY(-3px); border-color: rgba(120, 150, 255, 0.5); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 -2px 0 var(--acc), 0 18px 40px rgba(20, 50, 160, 0.3); }
+  .tile:hover { transform: translateY(-3px); border-color: rgba(var(--acc-rgb), 0.5); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 -2px 0 var(--acc), 0 18px 40px rgba(var(--acc-rgb), 0.18); }
   .tile:hover::after { opacity: 1; }
   .tile > * { position: relative; z-index: 1; margin: 0; }
 
@@ -108,12 +107,12 @@ const bars = [18, 26, 22, 34, 30, 44, 40, 52, 48, 62, 58, 72, 68, 84];
   /* Gauge */
   .gauge svg { width: min(78%, 15rem); margin: 0.4rem 0 -0.4rem; }
   .gauge line { stroke: #2b2f3a; stroke-width: 6; stroke-linecap: round; }
-  .gauge line.lit { stroke: var(--acc); opacity: 0.35; transition: opacity 0.3s calc(var(--i) * 35ms), stroke 0.3s; }
+  .gauge line.lit { stroke: var(--paper); opacity: 0.35; transition: opacity 0.3s calc(var(--i) * 35ms), stroke 0.3s; }
   .bento.seen .gauge line.lit { opacity: 1; }
   .gauge .needle { stroke: #cfd6e6; stroke-width: 3; transform-origin: 100px 104px; transform: rotate(-120deg); transition: transform 1.4s cubic-bezier(0.3, 1.4, 0.5, 1); }
   .bento.seen .gauge .needle { transform: rotate(62deg); }
   .gauge .hub { fill: #cfd6e6; }
-  .gauge:hover line.lit { stroke: #7da0ff; }
+  .gauge:hover line.lit { stroke: #fff; }
 
   /* Candle bars */
   .bars { display: flex; align-items: flex-end; gap: 5px; width: 78%; height: 5.4rem; margin: 0.4rem 0 0.3rem; }
@@ -121,7 +120,7 @@ const bars = [18, 26, 22, 34, 30, 44, 40, 52, 48, 62, 58, 72, 68, 84];
     flex: 1;
     height: var(--h);
     border-radius: 2px;
-    background: linear-gradient(var(--acc), rgba(79, 125, 255, 0.35));
+    background: linear-gradient(var(--paper), rgba(242, 241, 238, 0.25));
     transform: scaleY(0.15);
     transform-origin: bottom;
     transition: transform 0.7s var(--ease-reveal) calc(var(--i) * 45ms), filter 0.3s;
