@@ -16,14 +16,13 @@ Branch: `claude/eager-archimedes-00gdqw`.
 - Home (`src/pages/index.astro`): hero (placeholder, photo to add), Work (3 cards), the lab (side projects as dropdown rows), contact footer.
 - Case studies (`src/pages/work/[slug].astro`): TCPL, JP Morgan Chase, Country Delight. Snapshot box then problem, research, insight, options, solution, results, learnings.
 - Side projects: Novartis, Forus Health, AI Build Lab, MakeMyTrip, Paytm. Elective Planner is removed.
-- Data: `src/data/projects.js`. Menu: home, work, lab, contact.
+- Data: `src/data/projects.js`. Single pager: header = logo + tagline left, pill nav right (Home, Work, Lab, Contact) that scrolls to sections, bar hides on scroll down and returns with layered blur on scroll up.
+- Below hero: achievements bento. Footer: halftone panel (black dots fading to lab bg) with flowers and name.
 
 ## Design reference
-aucadian.com.au, especially its Lab section. Copied behaviours: sticky blend bar with layered blur on scroll-up, frosted full-screen menu, burger wipe, rotating stamp that speeds up on hover, pixel cursor in lab, arrow orb over work cards, row fill on hover. Lab background plain light (no pixel video).
+aucadian.com.au, especially its Lab section. Copied behaviours: layered blur on scroll-up, rotating stamp that speeds up on hover, pixel cursor in lab, arrow orb over work cards, row fill on hover. Lab background plain light (no pixel video).
 
 ## Open items
-- Photo of Radhika for hero (needs to arrive as a file).
 - Stamp ring text (placeholder: EXPLORATIONS / PRODUCT-LED).
 - Real email. Resume link in menu (ask before publishing PDF).
-- Header bug report from user: awaiting browser + description.
 - Research report: `reports/PM portfolio structure principles.md`.

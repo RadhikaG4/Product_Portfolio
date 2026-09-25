@@ -1,107 +1,112 @@
 ---
 import Logo from './Logo.astro';
-import { url, email } from '../data/projects.js';
+import { url } from '../data/projects.js';
 
 const links = [
-  { label: 'home', href: url() },
-  { label: 'work', href: url('#work') },
-  { label: 'lab', href: url('#lab') },
-  { label: 'contact', href: url('#contact') },
+  { label: 'Home', id: 'home' },
+  { label: 'Work', id: 'work' },
+  { label: 'Lab', id: 'lab' },
+  { label: 'Contact', id: 'contact' },
 ];
 ---
-<header class="site-header">
-  <a class="brand" href={url()} aria-label="Home"><Logo /></a>
-  <button class="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><span class="lines"></span></button>
-</header>
-
-<!-- Shown when scrolling back up: layered blur behind a blend-mode bar -->
+<!-- Layered blur behind the bar once the page is scrolled -->
 <div class="veil" aria-hidden="true">
   <div class="b1"></div><div class="b2"></div><div class="b3"></div><div class="b4"></div><div class="b5"></div>
 </div>
-<div class="sticky">
-  <a class="brand" href={url()} aria-label="Home"><Logo /></a>
-  <button class="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><span class="lines"></span></button>
-</div>
 
-<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Site navigation" inert>
-  <div class="menu-bar">
-    <a class="brand" href={url()} aria-label="Home"><Logo /></a>
-    <button class="menu-close" aria-label="Close menu"><span class="lines"></span></button>
-  </div>
+<header class="site-header">
+  <a class="brand" href={url('#home')} aria-label="Home">
+    <Logo size="2.2rem" />
+    <span class="tag">
+      <span>Product Manager</span>
+      <span class="live"><i></i>Open to PM roles</span>
+    </span>
+  </a>
   <nav aria-label="Main">
-    <ul>{links.map((l) => <li><a href={l.href}><span>{l.label}</span></a></li>)}</ul>
+    <span class="pill" aria-hidden="true"></span>
+    {links.map((l) => <a href={url(`#${l.id}`)} data-id={l.id}>{l.label}</a>)}
   </nav>
-  <a class="menu-email" href={`mailto:${email}`}>{email}</a>
-</div>
+</header>
 
 <style>
-  .site-header, .sticky, .menu-bar {
-    position: absolute;
-    inset: 0 0 auto;
-    height: var(--nav-h);
-    z-index: 120;
-  }
-  .brand {
-    position: absolute;
-    left: var(--nav-inset);
-    top: 0;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    color: #fff;
-    transition: opacity 0.2s var(--ease-swift);
-  }
-  .brand:hover { opacity: 0.75; }
-
-  /* Burger: two lines that wipe out and back in on hover */
-  .burger, .menu-close {
-    position: absolute;
-    right: var(--nav-inset);
-    top: 0;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    padding: 0;
-    background: none;
-    border: 0;
-    cursor: pointer;
-  }
-  .lines { position: relative; display: block; width: 24px; height: 10px; overflow: clip; }
-  .lines::before, .lines::after {
-    content: "";
-    position: absolute;
-    inset: 4px 0 auto;
-    height: 2px;
-    border-radius: 1px;
-    background: #fff;
-  }
-  .lines::before { transform: translateY(-4px); }
-  .lines::after { transform: translateY(4px); }
-  .burger.wipe .lines::before { animation: wipe-top 0.55s cubic-bezier(0.65, 0, 0.35, 1) both; }
-  .burger.wipe .lines::after { animation: wipe-bottom 0.55s cubic-bezier(0.65, 0, 0.35, 1) 0.07s both; }
-  @keyframes wipe-top {
-    0% { transform: translateY(-4px) scaleX(1); transform-origin: 100% 50%; }
-    46% { transform: translateY(-4px) scaleX(0); transform-origin: 100% 50%; }
-    54% { transform: translateY(-4px) scaleX(0); transform-origin: 0 50%; }
-    100% { transform: translateY(-4px) scaleX(1); transform-origin: 0 50%; }
-  }
-  @keyframes wipe-bottom {
-    0% { transform: translateY(4px) scaleX(1); transform-origin: 0 50%; }
-    46% { transform: translateY(4px) scaleX(0); transform-origin: 0 50%; }
-    54% { transform: translateY(4px) scaleX(0); transform-origin: 100% 50%; }
-    100% { transform: translateY(4px) scaleX(1); transform-origin: 100% 50%; }
-  }
-
-  /* Sticky bar + graduated blur, revealed on scroll-up */
-  .veil, .sticky {
+  .site-header {
     position: fixed;
-    transform: translateY(-101%);
+    inset: 0 0 auto;
+    z-index: 130;
+    height: var(--nav-h);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-inline: var(--nav-inset);
     transition: transform 0.45s var(--ease-reveal);
   }
-  :global(html.scrolled) :is(.veil, .sticky) { transform: none; }
-  :global(html.menu-open) :is(.veil, .sticky) { transform: translateY(-101%); }
-  .sticky { z-index: 130; mix-blend-mode: difference; }
-  .veil { inset: 0 0 auto; height: calc(var(--nav-h) * 1.3); z-index: 129; pointer-events: none; }
+  :global(html.nav-hidden) .site-header { transform: translateY(-101%); }
+
+  .brand { display: flex; align-items: center; gap: 1.1rem; color: #fff; }
+  .tag {
+    display: grid;
+    gap: 0.1rem;
+    padding-left: 1.1rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.18);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    line-height: 1.5;
+    color: #8a8f9c;
+  }
+  .live { color: #4ade80; }
+  .live i { display: inline-block; width: 5px; height: 5px; margin-right: 0.55rem; border-radius: 50%; background: currentColor; vertical-align: middle; animation: blink 2s ease-in-out infinite; }
+  @keyframes blink { 50% { opacity: 0.3; } }
+
+  /* Pill nav: a white pill slides under the active section */
+  nav {
+    position: relative;
+    display: flex;
+    padding: 0.3rem;
+    border-radius: 999px;
+    background: rgba(12, 12, 12, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    font-family: var(--font-inter);
+  }
+  nav a {
+    position: relative;
+    z-index: 1;
+    padding: 0.5rem 1.15rem;
+    border-radius: 999px;
+    color: #a3a7b2;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    transition: color 0.3s var(--ease-swift);
+  }
+  nav a:hover { color: #fff; }
+  nav a.on { color: #0b0b0b; }
+  .pill {
+    position: absolute;
+    top: 0.3rem;
+    bottom: 0.3rem;
+    left: 0;
+    width: 0;
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(255, 255, 255, 0.15);
+    transition: transform 0.45s var(--ease-reveal), width 0.45s var(--ease-reveal);
+  }
+
+  .veil {
+    position: fixed;
+    inset: 0 0 auto;
+    height: calc(var(--nav-h) * 1.3);
+    z-index: 129;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(rgba(8, 8, 8, 0.55), transparent);
+    transition: opacity 0.4s, transform 0.45s var(--ease-reveal);
+  }
+  :global(html.scrolled) .veil { opacity: 1; }
+  :global(html.nav-hidden) .veil { transform: translateY(-101%); }
   .veil > div { position: absolute; inset: 0; }
   .b1 { -webkit-backdrop-filter: blur(1.125px); backdrop-filter: blur(1.125px); -webkit-mask-image: linear-gradient(to top, transparent 0, #000 20%, #000 40%, transparent 60%); mask-image: linear-gradient(to top, transparent 0, #000 20%, #000 40%, transparent 60%); }
   .b2 { -webkit-backdrop-filter: blur(2.25px); backdrop-filter: blur(2.25px); -webkit-mask-image: linear-gradient(to top, transparent 20%, #000 40%, #000 60%, transparent 80%); mask-image: linear-gradient(to top, transparent 20%, #000 40%, #000 60%, transparent 80%); }
@@ -109,115 +114,53 @@ const links = [
   .b4 { -webkit-backdrop-filter: blur(9px); backdrop-filter: blur(9px); -webkit-mask-image: linear-gradient(to top, transparent 60%, #000 80%, #000 100%); mask-image: linear-gradient(to top, transparent 60%, #000 80%, #000 100%); }
   .b5 { -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); -webkit-mask-image: linear-gradient(to top, transparent 80%, #000 100%); mask-image: linear-gradient(to top, transparent 80%, #000 100%); }
 
-  /* Full-screen menu: inverted frosted glass that wipes down */
-  .menu {
-    position: fixed;
-    inset: 0;
-    z-index: 200;
-    visibility: hidden;
-    background: #00000029;
-    -webkit-backdrop-filter: invert(1) blur(50px) contrast(0.82); backdrop-filter: invert(1) blur(50px) contrast(0.82);
-    clip-path: inset(0 0 100% 0);
-    transition: clip-path 0.62s var(--ease-reveal), visibility 0s linear 0.62s;
+  @media (max-width: 767.98px) {
+    .tag { display: none; }
+    nav a { padding: 0.45rem 0.75rem; font-size: 0.82rem; }
   }
-  :global(html.menu-open) .menu {
-    visibility: visible;
-    clip-path: inset(0);
-    transition: clip-path 0.62s var(--ease-reveal), visibility 0s;
-  }
-  :global(html.menu-open) { overflow: hidden; }
-  .menu-bar { z-index: 4; }
-  .menu-close .lines { overflow: visible; }
-  .menu-close .lines::before, .menu-close .lines::after { transition: transform 0.34s var(--ease-reveal) 0.16s; }
-  :global(html.menu-open) .menu-close .lines::before { transform: rotate(45deg); }
-  :global(html.menu-open) .menu-close .lines::after { transform: rotate(-45deg); }
-
-  .menu nav { position: absolute; inset: 0; display: grid; place-items: center; z-index: 2; pointer-events: none; }
-  .menu ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
-  .menu li { opacity: 0; transform: translateY(1.1rem); transition: opacity 0.5s var(--ease-reveal), transform 0.5s var(--ease-reveal); }
-  :global(html.menu-open) .menu li { opacity: 1; transform: none; }
-  :global(html.menu-open) .menu li:nth-child(1) { transition-delay: 0.3s; }
-  :global(html.menu-open) .menu li:nth-child(2) { transition-delay: 0.38s; }
-  :global(html.menu-open) .menu li:nth-child(3) { transition-delay: 0.46s; }
-  :global(html.menu-open) .menu li:nth-child(4) { transition-delay: 0.54s; }
-  .menu nav a {
-    display: inline-block;
-    pointer-events: auto;
-    font-weight: 700;
-    font-size: clamp(2.8rem, 8vw, 5.33333rem);
-    line-height: 1.08;
-    letter-spacing: -0.02em;
-    transition: filter 0.75s cubic-bezier(0.33, 1, 0.68, 1);
-  }
-  .menu nav a span {
-    -webkit-text-fill-color: #fff;
-    background: linear-gradient(90deg, #fff, #d4d4d4, #fff) 0 0 / 200% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    animation: sheen 2.2s linear infinite paused;
-    transition: -webkit-text-fill-color 0.45s var(--ease-swift);
-  }
-  /* Hovering one link blurs the rest, neighbours less */
-  .menu ul:hover a { filter: blur(6px); }
-  .menu ul:hover li:hover + li a, .menu ul:hover li:has(+ li:hover) a { filter: blur(3px); }
-  .menu ul:hover li:hover a { filter: none; transition-duration: 0.3s; }
-  .menu ul:hover li:hover a span { -webkit-text-fill-color: transparent; animation-play-state: running; }
-  @keyframes sheen { to { background-position: 200% 0; } }
-
-  .menu-email {
-    position: absolute;
-    inset: auto 0 2.66667rem;
-    z-index: 2;
-    text-align: center;
-    font-size: 1.11111rem;
-    text-decoration: underline;
-    text-underline-offset: 0.14em;
-    opacity: 0;
-    transition: opacity 0.5s var(--ease-reveal) 0.55s, color 0.2s var(--ease-swift);
-  }
-  :global(html.menu-open) .menu-email { opacity: 1; }
-  .menu-email:hover { color: #bdbdbd; }
-
   @media (prefers-reduced-motion: reduce) {
-    .menu, :global(html.menu-open) .menu { clip-path: none; transition: visibility 0s; }
-    .menu li, .menu-email, .menu-close .lines::before, .menu-close .lines::after, .veil, .sticky { transition: none; }
-    .menu ul:hover a { filter: none !important; }
+    .site-header, .veil, .pill { transition: none; }
   }
 </style>
 
 <script>
   const root = document.documentElement;
-  const menu = document.getElementById('menu')!;
-  const burgers = document.querySelectorAll<HTMLButtonElement>('.burger');
+  const nav = document.querySelector<HTMLElement>('.site-header nav')!;
+  const pill = nav.querySelector<HTMLElement>('.pill')!;
+  const links = [...nav.querySelectorAll<HTMLAnchorElement>('a')];
+  // Only the home page has all sections; elsewhere highlight Work
+  const sections = document.getElementById('home') ? (links.map((a) => document.getElementById(a.dataset.id!)).filter(Boolean) as HTMLElement[]) : [];
 
-  const setMenu = (open: boolean) => {
-    root.classList.toggle('menu-open', open);
-    menu.toggleAttribute('inert', !open);
-    burgers.forEach((b) => b.setAttribute('aria-expanded', String(open)));
-    if (open) menu.querySelector<HTMLElement>('.menu-close')?.focus();
+  const setActive = (id: string) => {
+    const a = links.find((l) => l.dataset.id === id);
+    if (!a) return;
+    links.forEach((l) => l.classList.toggle('on', l === a));
+    pill.style.width = `${a.offsetWidth}px`;
+    pill.style.transform = `translateX(${a.offsetLeft}px)`;
   };
-  burgers.forEach((b) => b.addEventListener('click', () => setMenu(true)));
-  menu.querySelector('.menu-close')!.addEventListener('click', () => setMenu(false));
-  menu.querySelectorAll('nav a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
-  document.addEventListener('keydown', (e) => e.key === 'Escape' && setMenu(false));
 
-  if (matchMedia('(hover: hover) and (prefers-reduced-motion: no-preference)').matches) {
-    burgers.forEach((b) => {
-      b.addEventListener('mouseenter', () => b.classList.add('wipe'));
-      b.addEventListener('animationend', (e) => e.pseudoElement === '::after' && b.classList.remove('wipe'));
-    });
-  }
+  // Active section = the last one whose top has passed 40% of the viewport
+  const spy = () => {
+    let id = sections[0]?.id ?? 'home';
+    for (const s of sections) if (s.getBoundingClientRect().top < innerHeight * 0.4) id = s.id;
+    if (innerHeight + scrollY >= document.documentElement.scrollHeight - 4) id = sections.at(-1)?.id ?? id;
+    setActive(id);
+  };
 
-  // Sticky bar appears when scrolling up past 60% of the viewport, hides on scroll down.
+  // Bar hides on scroll down, returns on scroll up; blur shows once off the top.
   let lastY = scrollY;
   let ticking = false;
   const onScroll = () => {
     const y = scrollY;
-    if (y <= innerHeight * 0.6) root.classList.remove('scrolled');
-    else if (y < lastY - 2) root.classList.add('scrolled');
-    else if (y > lastY + 2) root.classList.remove('scrolled');
+    root.classList.toggle('scrolled', y > 10);
+    if (y < innerHeight * 0.6 || y < lastY - 2) root.classList.remove('nav-hidden');
+    else if (y > lastY + 2) root.classList.add('nav-hidden');
     lastY = y;
+    if (sections.length) spy();
     ticking = false;
   };
   addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+  addEventListener('resize', () => sections.length && spy());
+  document.fonts?.ready.then(() => (sections.length ? spy() : setActive('work')));
+  onScroll();
 </script>
